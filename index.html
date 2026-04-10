@@ -73,7 +73,7 @@ body::after{
 .pane.on{display:flex;animation:su .42s cubic-bezier(.22,1,.36,1);}
 @keyframes su{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
-/* --- AUTHENTICATION STYLES --- */
+/* --- AUTHENTICATION STYLES with Logo --- */
 .auth-screen {
   max-width: 340px;
   width: 90%;
@@ -84,6 +84,27 @@ body::after{
   padding: 32px 24px 40px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,136,58,0.15);
   text-align: center;
+}
+.auth-logo {
+  margin-bottom: 20px;
+}
+.auth-logo-main {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #E9B96E, #C8883A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+}
+.auth-logo-sub {
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 6px;
 }
 .auth-brand-eye {
   font-size: 9px;
@@ -496,7 +517,7 @@ body::after{
 .report-buttons{display:flex;flex-direction:column;gap:12px;margin:20px 0;}
 .whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:40px;padding:14px;color:white;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;}
 .whatsapp-btn:active{transform:scale(0.97);}
-/* Stepper inside modals */
+/* modal stepper */
 .modal-stepper {
   display: flex;
   align-items: center;
@@ -521,57 +542,102 @@ body::after{
   color: var(--text);
   width: 100px;
 }
+/* Logo in app header */
+.app-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.app-logo-main {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #E9B96E, #C8883A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+}
+.app-logo-sub {
+  font-size: 6px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
 </style>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
 
-<div id="auth-overlay"><div class="auth-screen"><div class="auth-brand-eye">Smart Duka</div><div class="auth-brand-name">Smart <em>Duka</em></div><div class="auth-tabs"><button class="auth-tab active" id="tab-login" onclick="authSetTab('login')">Sign In</button><button class="auth-tab" id="tab-signup" onclick="authSetTab('signup')">Sign Up</button></div><div id="login-fields"><div class="auth-input-group"><label>Email</label><input type="email" id="login-email" placeholder="shop@example.com"></div><div class="auth-input-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div></div><div id="signup-fields" style="display:none;"><div class="auth-input-group"><label>Shop Name</label><input type="text" id="signup-shopname" placeholder="My Duka"></div><div class="auth-input-group"><label>Email</label><input type="email" id="signup-email" placeholder="shop@example.com"></div><div class="auth-input-group"><label>Password</label><input type="password" id="signup-password" placeholder="min. 6 characters"></div></div><div class="auth-error" id="auth-error"></div><button class="auth-submit-btn" id="auth-submit-btn" onclick="authSubmit()">Sign In</button><div class="auth-switch-text" id="auth-switch-msg">Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span></div></div></div>
+<!-- AUTH OVERLAY with Logo -->
+<div id="auth-overlay">
+  <div class="auth-screen">
+    <div class="auth-logo">
+      <div class="auth-logo-main">SAGE</div>
+      <div class="auth-logo-sub">SOFTWARE DEVELOPMENT COMPANY</div>
+    </div>
+    <div class="auth-brand-eye">Smart Duka</div>
+    <div class="auth-brand-name">Smart <em>Duka</em></div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="authSetTab('login')">Sign In</button>
+      <button class="auth-tab" id="tab-signup" onclick="authSetTab('signup')">Sign Up</button>
+    </div>
+    <div id="login-fields">
+      <div class="auth-input-group"><label>Email</label><input type="email" id="login-email" placeholder="shop@example.com"></div>
+      <div class="auth-input-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div>
+    </div>
+    <div id="signup-fields" style="display:none;">
+      <div class="auth-input-group"><label>Shop Name</label><input type="text" id="signup-shopname" placeholder="My Duka"></div>
+      <div class="auth-input-group"><label>Email</label><input type="email" id="signup-email" placeholder="shop@example.com"></div>
+      <div class="auth-input-group"><label>Password</label><input type="password" id="signup-password" placeholder="min. 6 characters"></div>
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <button class="auth-submit-btn" id="auth-submit-btn" onclick="authSubmit()">Sign In</button>
+    <div class="auth-switch-text" id="auth-switch-msg">Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span></div>
+  </div>
+</div>
 
+<!-- MAIN APP with Logo in Header -->
 <div id="app" style="display:none;">
-<div id="hdr"><div class="hdr-row"><div><div class="brand-eye">Smart Duka</div><div class="brand-name"><span id="shop-name-display">My Shop</span></div></div><div class="header-buttons"><button class="report-btn" onclick="openReportModal()">📊 Reports</button><button class="logout-btn" onclick="authLogout()">↪</button></div></div></div>
+<div id="hdr">
+  <div class="hdr-row">
+    <div class="app-logo">
+      <div class="app-logo-main">SAGE</div>
+      <div class="app-logo-sub">SOFTWARE DEVELOPMENT COMPANY</div>
+      <div class="brand-eye" style="margin-top: 6px;">Smart Duka</div>
+      <div class="brand-name"><span id="shop-name-display">My Shop</span></div>
+    </div>
+    <div class="header-buttons">
+      <button class="report-btn" onclick="openReportModal()">📊 Reports</button>
+      <button class="logout-btn" onclick="authLogout()">↪</button>
+    </div>
+  </div>
+</div>
 <div id="content"><div id="pane-customers" class="pane on"><div class="phdr"><div><div class="plbl">Client Deck</div><div class="ptotal" id="p-cust">0 Accounts</div></div><button class="addbtn" onclick="openModal('addCustomer')">＋ Add Client</button></div><div class="cust-alert-banner" id="cust-alert">⚠️ <span id="cust-alert-text"></span></div><div class="cust-search-box"><span>🔍</span><input type="text" id="cust-search-input" placeholder="Search..." oninput="filterCustomers()"></div><select id="filter-dropdown" class="filter-dropdown" onchange="setCustFilter(this.value)"><option value="all">👥 All Clients</option><option value="debt">⚠️ Has Debt</option><option value="clear">✅ Cleared</option></select><div id="cust-list"></div></div></div>
 </div>
 
-<!-- MODALS (with + and - buttons for amount in payment & credit modals) -->
+<!-- MODALS (unchanged functionality) -->
 <div class="moverlay" id="mo-report"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Share Report</div><button class="mclose" onclick="cm('report')">✕</button></div><div class="report-buttons"><button class="whatsapp-btn" onclick="shareReport('daily')"><span>📅</span> Daily Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('weekly')"><span>📆</span> Weekly Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('monthly')"><span>📊</span> Monthly Report (WhatsApp)</button></div></div></div>
 <div class="moverlay" id="mo-overduePicker"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Set Overdue Date</div><button class="mclose" onclick="cm('overduePicker')">✕</button></div><div class="fld"><label>Last Credit Date</label><input type="date" id="overdue-date-input"></div><div class="fld"><label>Manual Days</label><input type="number" id="overdue-days-manual" placeholder="Days overdue"></div><button class="sbtn bl" onclick="applyOverdueDate()">Apply</button></div></div>
 <div class="moverlay" id="mo-addCustomer"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Add Client</div><button class="mclose" onclick="cm('addCustomer')">✕</button></div><div class="fld"><label>Full Name</label><input type="text" id="cn-name"></div><div class="fld"><label>Phone</label><input type="tel" id="cn-phone"></div><button class="sbtn bl" onclick="addCustomer()">Add →</button></div></div>
 <div class="moverlay" id="mo-custDetail"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Profile</div><button class="mclose" onclick="cm('custDetail')">✕</button><div class="cd-hero"><div class="cd-name-lbl" id="cd-name">—</div><div class="cd-phone-lbl" id="cd-phone">—</div><div class="cd-stats-grid"><div class="cd-stat"><div class="cd-stat-lbl">Balance</div><div class="cd-stat-val" id="cd-balance">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Total Spent</div><div class="cd-stat-val" id="cd-spent">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Credit</div><div class="cd-stat-val" id="cd-credit">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Payments</div><div class="cd-stat-val" id="cd-debit">KES 0</div></div></div></div><div class="cd-actions"><button class="cd-act-btn pay" onclick="openRecordPayment()">✅ Payment</button><button class="cd-act-btn credit" onclick="openSellCredit()">+ Credit</button></div><div id="cd-txns" class="cd-txn-list"></div><button class="sbtn rd" onclick="deleteCurrentCustomer()">Delete</button></div></div>
-
-<!-- RECORD PAYMENT MODAL with + and - buttons -->
 <div class="moverlay" id="mo-recordPayment"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Record Payment</div><button class="mclose" onclick="cm('recordPayment')">✕</button></div><div style="background:rgba(10,145,103,0.07); border-radius:var(--r2); padding:14px; margin-bottom:20px"><div style="font-size:9.5px; color:var(--muted);">Outstanding Balance</div><div style="font-family:var(--serif); font-size:28px;" id="rp-balance-display">KES 0</div></div>
-<div class="fld"><label>Amount (KES)</label>
-  <div class="modal-stepper">
-    <button class="stepper-btn" onclick="stepModalAmount('rp-amount', -100)">−</button>
-    <input type="number" id="rp-amount" class="stepper-input" value="0" step="100">
-    <button class="stepper-btn" onclick="stepModalAmount('rp-amount', 100)">+</button>
-  </div>
-</div>
+<div class="fld"><label>Amount (KES)</label><div class="modal-stepper"><button class="stepper-btn" onclick="stepModalAmount('rp-amount', -100)">−</button><input type="number" id="rp-amount" class="stepper-input" value="0" step="100"><button class="stepper-btn" onclick="stepModalAmount('rp-amount', 100)">+</button></div></div>
 <div class="fld"><label>Note (optional)</label><input type="text" id="rp-note" placeholder="e.g., Cash payment"></div>
 <button class="sbtn gn" onclick="recordPayment()">Record Payment ✓</button></div></div>
-
-<!-- SELL ON CREDIT MODAL with + and - buttons -->
 <div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05); border-radius:var(--r2); padding:14px; margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div>
 <div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div>
-<div class="fld"><label>Amount (KES)</label>
-  <div class="modal-stepper">
-    <button class="stepper-btn" onclick="stepModalAmount('sc-amount', -100)">−</button>
-    <input type="number" id="sc-amount" class="stepper-input" value="0" step="100">
-    <button class="stepper-btn" onclick="stepModalAmount('sc-amount', 100)">+</button>
-  </div>
-</div>
+<div class="fld"><label>Amount (KES)</label><div class="modal-stepper"><button class="stepper-btn" onclick="stepModalAmount('sc-amount', -100)">−</button><input type="number" id="sc-amount" class="stepper-input" value="0" step="100"><button class="stepper-btn" onclick="stepModalAmount('sc-amount', 100)">+</button></div></div>
 <button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// Core: collapsible cards, steppers, history, and modal +/-
+// Full client management with collapsible cards, steppers, history, modal +/-, and logo
 let customers = [], customerTransactions = [];
 let custFilter = 'all', custSearch = '';
 let selectedCustomerId = null, pendingOverdueCid = null;
 let db = null, currentUser = null;
-let clientHistory = new Map(); // clientId -> array of {timestamp, name, credit, debit}
+let clientHistory = new Map();
 
-// Helper: step amount in modal inputs
 function stepModalAmount(inputId, delta) {
   let inp = document.getElementById(inputId);
   if(inp) {
@@ -582,7 +648,6 @@ function stepModalAmount(inputId, delta) {
   }
 }
 
-// Helpers
 const fmt = n => 'KES ' + (n||0).toLocaleString('en-KE');
 const fmtShort = n => { let v = Math.abs(n||0); return v>=1000?(n<0?'-':'')+(v/1000).toFixed(1)+'K':String(Math.round(n||0)); };
 function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
@@ -603,7 +668,6 @@ async function updateFullCustomer(cid, name, phone, creditVal, paidVal, overdueD
   let history = clientHistory.get(cid) || [];
   history.unshift({ timestamp: new Date(), name: cust.name, credit: cust.credit, debit: cust.debit });
   clientHistory.set(cid, history);
-  
   cust.name = name.trim() || cust.name;
   cust.phone = phone.trim() || '';
   cust.credit = parseFloat(creditVal)||0;
@@ -708,37 +772,24 @@ function renderCustomers() {
   document.getElementById('cust-list').innerHTML = html;
 }
 
-// --- REPORT FUNCTION ---
 async function shareReport(period) {
   const shop = currentUser?.shopName || 'Smart Duka';
   const now = new Date();
   let periodLabel = '';
-  if(period === 'daily') {
-    periodLabel = `Daily Report - ${now.toLocaleDateString()}`;
-  } else if(period === 'weekly') {
-    let start = new Date(now);
-    start.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
-    periodLabel = `Weekly Report (${start.toLocaleDateString()} - ${now.toLocaleDateString()})`;
-  } else {
-    periodLabel = `Monthly Report - ${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
-  }
-  const totalClients = customers.length;
-  const totalDebt = customers.reduce((sum, c) => sum + (c.balance || 0), 0);
-  const debtors = customers.filter(c => (c.balance || 0) > 0).length;
-  let clientLines = customers.slice(0, 15).map(c => {
-    let bal = c.balance || 0;
-    let status = bal === 0 ? '✓ Cleared' : `💸 ${fmt(bal)}`;
-    return `• ${c.name}: ${status}`;
-  });
-  if(customers.length === 0) clientLines = ['No clients registered.'];
+  if(period === 'daily') periodLabel = `Daily Report - ${now.toLocaleDateString()}`;
+  else if(period === 'weekly') { let start = new Date(now); start.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1)); periodLabel = `Weekly Report (${start.toLocaleDateString()} - ${now.toLocaleDateString()})`; }
+  else periodLabel = `Monthly Report - ${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
+  const totalClients = customers.length, totalDebt = customers.reduce((s,c)=>s+(c.balance||0),0), debtors = customers.filter(c=>(c.balance||0)>0).length;
+  let clientLines = customers.slice(0,15).map(c=>{ let bal=c.balance||0; return `• ${c.name}: ${bal===0?'✓ Cleared':`💸 ${fmt(bal)}`}`; });
+  if(customers.length===0) clientLines=['No clients registered.'];
   let clientListText = clientLines.join('\n');
-  if(customers.length > 15) clientListText += `\n... and ${customers.length - 15} more clients.`;
+  if(customers.length>15) clientListText += `\n... and ${customers.length-15} more clients.`;
   const msg = `*${shop}*\n📋 ${periodLabel}\n👥 Total Clients: ${totalClients}\n💳 Total Outstanding Debt: ${fmt(totalDebt)}\n⚠️ Clients with Debt: ${debtors}\n\n📋 *Client List:*\n${clientListText}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 function openReportModal() { openModal('report'); }
 
-// Database operations (IndexedDB)
+// IndexedDB operations (same as before, kept intact)
 async function getAll(store) { return new Promise((res,rej)=>{const r=db.transaction(store,'readonly').objectStore(store).getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
 async function updateItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).put(item); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
 async function deleteItem(store,id) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).delete(id); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
@@ -802,20 +853,8 @@ async function sellOnCredit() {
   cm('sellCredit');
   if(selectedCustomerId) viewCustomer(selectedCustomerId);
 }
-function openRecordPayment() { 
-  let cust = customers.find(c=>c.id===selectedCustomerId);
-  if(cust) document.getElementById('rp-balance-display').textContent = fmt(cust.balance);
-  document.getElementById('rp-amount').value = '';
-  openModal('recordPayment'); 
-  cm('custDetail'); 
-}
-function openSellCredit() { 
-  document.getElementById('sc-cust-name').textContent = customers.find(c=>c.id===selectedCustomerId)?.name||'';
-  document.getElementById('sc-note').value = '';
-  document.getElementById('sc-amount').value = '';
-  openModal('sellCredit'); 
-  cm('custDetail'); 
-}
+function openRecordPayment() { let cust = customers.find(c=>c.id===selectedCustomerId); if(cust) document.getElementById('rp-balance-display').textContent = fmt(cust.balance); document.getElementById('rp-amount').value = ''; openModal('recordPayment'); cm('custDetail'); }
+function openSellCredit() { document.getElementById('sc-cust-name').textContent = customers.find(c=>c.id===selectedCustomerId)?.name||''; document.getElementById('sc-note').value = ''; document.getElementById('sc-amount').value = ''; openModal('sellCredit'); cm('custDetail'); }
 function deleteCurrentCustomer() { if(selectedCustomerId) deleteCustomerWithTransactions(selectedCustomerId); }
 async function addCustomer() {
   let name = document.getElementById('cn-name').value.trim();
@@ -833,11 +872,8 @@ async function applyOverdueDate() {
   if(!cust) return;
   let dateStr = document.getElementById('overdue-date-input').value;
   let manual = parseInt(document.getElementById('overdue-days-manual').value);
-  if(dateStr) {
-    let days = Math.floor((new Date() - new Date(dateStr))/86400000);
-    if(days<0) days=0;
-    cust.manualOverdueDays = days;
-  } else if(!isNaN(manual) && manual>=0) cust.manualOverdueDays = manual;
+  if(dateStr) { let days = Math.floor((new Date() - new Date(dateStr))/86400000); if(days<0) days=0; cust.manualOverdueDays = days; }
+  else if(!isNaN(manual) && manual>=0) cust.manualOverdueDays = manual;
   else { alert('Enter date or days'); return; }
   await updateItem('customers',cust);
   await refreshData();
@@ -849,7 +885,7 @@ function filterCustomers() { custSearch = document.getElementById('cust-search-i
 function openModal(t) { document.getElementById(`mo-${t}`).classList.add('on'); }
 function cm(t) { document.getElementById(`mo-${t}`).classList.remove('on'); }
 
-// Auth (preserved)
+// Auth (unchanged, works)
 const AUTH_SALT='salt',SESSION_KEY='dm_session',USERS_KEY='dm_users';
 async function hashPassword(pw){const enc=new TextEncoder(),data=enc.encode(pw+AUTH_SALT),buf=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
 function generateUserId(){return 'user_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);}
