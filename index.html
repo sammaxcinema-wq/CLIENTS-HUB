@@ -200,51 +200,274 @@ body::after{
   text-decoration: underline;
 }
 
-/* --- CLIENTS PANEL STYLES + Overdue --- */
-.card{background:rgba(12,19,16,0.75);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;}
-.sec-lbl{font-size:9px;font-weight:700;letter-spacing:3.5px;color:var(--muted);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
-.phdr{display:flex;justify-content:space-between;align-items:center;padding:6px 0 2px;}
-.ptotal{font-family:var(--serif);font-size:34px;font-weight:400;letter-spacing:-0.5px;}
-.plbl{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:600;}
-.addbtn{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--gold),#A86E28);border:1px solid var(--border2);color:#0A0600;border-radius:100px;padding:10px 18px;font-size:12.5px;font-weight:700;cursor:pointer;}
-.addbtn:active{transform:scale(.94);}
-.cust-item{background:rgba(12,19,16,0.75);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;transition:all 0.2s;cursor:pointer;}
-.cust-item.has-debt{border-left:3px solid var(--rose);}
-.cust-item-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
-.cust-info{flex:1;}
-.cust-name{font-size:15px;font-weight:700;margin-bottom:6px;color:var(--gold2);}
-.cust-phone{font-size:11px;color:var(--muted2);margin-bottom:10px;}
-.overdue-badge{font-size:10px;background:rgba(229,69,98,0.15);color:#FB8097;border-radius:20px;padding:2px 8px;display:inline-block;margin-left:8px;font-weight:600;}
-.overdue-badge.severe{background:#E54562;color:#fff;}
-.cust-edit-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 10px 0;}
-.cust-edit-field{flex:1;min-width:70px;}
-.cust-edit-field label{font-size:8px;color:var(--muted);display:block;margin-bottom:3px;letter-spacing:0.8px;}
-.cust-edit-field input{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 6px;color:var(--text);font-size:12px;outline:none;}
-.cust-action-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
-.cust-update-btn{background:rgba(10,145,103,0.15);border:1px solid rgba(10,145,103,0.3);color:var(--em2);border-radius:8px;padding:6px 12px;font-size:10px;font-weight:700;cursor:pointer;}
-.cust-delete-btn{background:rgba(229,69,98,0.1);border:1px solid rgba(229,69,98,0.2);color:#FB8097;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:700;cursor:pointer;}
-.refresh-overdue-btn{background:rgba(200,136,58,0.15);border:1px solid rgba(200,136,58,0.3);color:var(--gold2);border-radius:8px;padding:6px 12px;font-size:10px;font-weight:700;cursor:pointer;}
-.set-overdue-btn{background:rgba(74,158,223,0.15);border:1px solid rgba(74,158,223,0.3);color:#7AB8E8;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:700;cursor:pointer;}
-.cust-bal{text-align:right;}
-.cust-bal-num{font-family:var(--serif);font-size:28px;font-weight:500;}
-.cust-bal-num.debt{color:#FB8097;}
-.cust-bal-num.clear{color:var(--em2);}
-.cust-bal-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:4px;}
-.debt-alert{font-size:9px;color:#FB8097;font-weight:700;margin-top:6px;}
-.cust-alert-banner{display:none;margin-bottom:16px;background:rgba(229,69,98,0.07);border:1px solid rgba(229,69,98,0.18);border-radius:var(--r2);padding:12px 16px;font-size:12px;color:#F9A8B8;}
-.cust-alert-banner.show{display:flex;gap:10px;align-items:center;}
-.empty-state{text-align:center;padding:48px 20px;color:var(--muted2);}
-.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.5;}
-.cust-search-box{display:flex;gap:10px;background:rgba(12,19,16,0.75);border:1px solid var(--border);border-radius:var(--r2);padding:8px 14px;margin-bottom:16px;}
-.cust-search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;}
-.cust-filter-row{display:flex;gap:8px;margin-bottom:18px;}
-.cf-btn{flex:1;padding:10px 0;background:transparent;border:1px solid var(--border);border-radius:40px;color:var(--muted2);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
-.cf-btn.on{background:rgba(200,136,58,0.12);border-color:rgba(200,136,58,0.4);color:var(--gold2);}
-.cust-stats-row{margin-top:10px;font-size:11px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-.cust-stats-row .cst{background:var(--s2);padding:4px 8px;border-radius:20px;}
-
-/* --- MODAL STYLES --- */
+/* --- Collapsible Card Styles --- */
+.cust-item {
+  background: rgba(12,19,16,0.75);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.cust-item.has-debt {
+  border-left: 3px solid var(--rose);
+}
+.cust-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cust-header:active {
+  background: rgba(255,255,255,0.02);
+}
+.cust-header-left {
+  flex: 1;
+}
+.cust-name-header {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold2);
+  margin-bottom: 4px;
+}
+.cust-phone-header {
+  font-size: 11px;
+  color: var(--muted2);
+}
+.cust-balance-badge {
+  text-align: right;
+}
+.cust-bal-num {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 500;
+}
+.cust-bal-num.debt { color: #FB8097; }
+.cust-bal-num.clear { color: var(--em2); }
+.cust-bal-lbl {
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.expand-icon {
+  font-size: 20px;
+  margin-left: 12px;
+  color: var(--muted2);
+  transition: transform 0.2s;
+}
+.cust-item.expanded .expand-icon {
+  transform: rotate(180deg);
+}
+.cust-details {
+  display: none;
+  padding: 0 18px 18px 18px;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,0.2);
+}
+.cust-item.expanded .cust-details {
+  display: block;
+}
+.stepper-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--s2);
+  border-radius: 40px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  width: 100%;
+}
+.stepper-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 30px;
+  color: var(--gold2);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.1s;
+}
+.stepper-btn:active {
+  transform: scale(0.92);
+  background: rgba(200,136,58,0.3);
+}
+.stepper-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  font-family: var(--sans);
+  outline: none;
+}
+.history-log {
+  margin-top: 12px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 10px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.history-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.history-entry {
+  font-family: monospace;
+  font-size: 9px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: var(--muted2);
+}
+.history-entry span {
+  color: var(--gold2);
+}
+.cust-edit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0 12px;
+}
+.cust-edit-field {
+  flex: 1;
+  min-width: 120px;
+}
+.cust-edit-field label {
+  font-size: 8px;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+.cust-name-edit, .cust-phone-edit {
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: var(--text);
+  font-size: 12px;
+  outline: none;
+}
+.balance-preview {
+  font-size: 11px;
+  font-weight: 600;
+  margin: 8px 0;
+  color: var(--em2);
+}
+.balance-preview.debt {
+  color: #FB8097;
+}
+.cust-action-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 8px;
+}
+.cust-update-btn, .cust-delete-btn, .refresh-overdue-btn, .set-overdue-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+.cust-update-btn {
+  background: rgba(10,145,103,0.2);
+  color: var(--em2);
+  border: 1px solid rgba(10,145,103,0.3);
+}
+.cust-delete-btn {
+  background: rgba(229,69,98,0.15);
+  color: #FB8097;
+  border: 1px solid rgba(229,69,98,0.2);
+}
+.refresh-overdue-btn {
+  background: rgba(200,136,58,0.15);
+  color: var(--gold2);
+  border: 1px solid rgba(200,136,58,0.3);
+}
+.set-overdue-btn {
+  background: rgba(74,158,223,0.15);
+  color: #7AB8E8;
+  border: 1px solid rgba(74,158,223,0.3);
+}
+.overdue-badge {
+  font-size: 9px;
+  background: rgba(229,69,98,0.2);
+  color: #FB8097;
+  border-radius: 20px;
+  padding: 2px 8px;
+  display: inline-block;
+  margin-left: 8px;
+  font-weight: 600;
+}
+.overdue-badge.severe {
+  background: #E54562;
+  color: white;
+}
+.filter-dropdown {
+  width: 100%;
+  background: rgba(12,19,16,0.9);
+  border: 1px solid var(--border);
+  border-radius: 60px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  margin-bottom: 18px;
+  cursor: pointer;
+}
+.cust-search-box {
+  display: flex;
+  gap: 10px;
+  background: rgba(12,19,16,0.75);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 8px 14px;
+  margin-bottom: 16px;
+}
+.cust-search-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 14px;
+}
+.phdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.ptotal {
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 400;
+}
+.addbtn {
+  background: linear-gradient(135deg, var(--gold), #A86E28);
+  border: none;
+  border-radius: 100px;
+  padding: 10px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* modal & report styles */
 .moverlay{position:fixed;inset:0;z-index:50;background:transparent;display:none;align-items:flex-end;justify-content:center;}
 .moverlay.on{display:flex;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);}
 .msheet{background:rgba(10,15,11,0.96);width:100%;max-width:430px;border-radius:28px 28px 0 0;border-top:1px solid rgba(255,255,255,0.08);padding:0 22px 48px;max-height:92vh;overflow-y:auto;}
@@ -261,268 +484,373 @@ body::after{
 .sbtn.am{background:linear-gradient(135deg,var(--gold),#A86E28);color:#0A0600;}
 .sbtn.rd{background:linear-gradient(135deg,var(--rose),#B8293B);color:#fff;}
 .cd-hero{background:linear-gradient(135deg,rgba(22,34,25,0.9),rgba(10,18,9,0.8));border-radius:var(--r);padding:20px;margin-bottom:20px;}
-.cd-name-lbl{font-family:var(--serif);font-size:26px;margin-bottom:6px;}
 .cd-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
 .cd-stat{background:var(--s3);border-radius:var(--r2);padding:12px;}
 .cd-stat-lbl{font-size:8.5px;color:var(--muted);margin-bottom:4px;}
 .cd-stat-val{font-family:var(--serif);font-size:22px;font-weight:500;}
-.cd-stat-val.debt{color:#FB8097;}
-.cd-stat-val.clear{color:var(--em2);}
 .cd-actions{display:flex;gap:12px;margin:20px 0;}
 .cd-act-btn{flex:1;padding:12px;border-radius:var(--r2);font-weight:700;text-align:center;cursor:pointer;}
-.cd-act-btn.pay{background:linear-gradient(135deg,var(--em),#076B4E);color:#fff;border:none;}
-.cd-act-btn.credit{background:linear-gradient(135deg,var(--gold),#A86E28);color:#0A0600;border:none;}
+.cd-act-btn.pay{background:linear-gradient(135deg,var(--em),#076B4E);color:#fff;}
+.cd-act-btn.credit{background:linear-gradient(135deg,var(--gold),#A86E28);color:#0A0600;}
 .cd-txn-list .cd-txn{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
-.cd-txn-type{font-size:12.5px;font-weight:600;}
-.cd-txn-amt{font-family:var(--serif);font-size:18px;}
-.cd-txn-note{font-size:11px;color:var(--muted2);margin-top:3px;}
-.cd-txn-date{font-size:9px;color:var(--muted);margin-top:4px;}
 .report-buttons{display:flex;flex-direction:column;gap:12px;margin:20px 0;}
-.whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:40px;padding:14px;color:white;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
+.whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:40px;padding:14px;color:white;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;}
 .whatsapp-btn:active{transform:scale(0.97);}
+/* Stepper inside modals */
+.modal-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--s2);
+  border-radius: 60px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+}
+.modal-stepper .stepper-btn {
+  background: rgba(255,255,255,0.1);
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+}
+.modal-stepper .stepper-input {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  width: 100px;
+}
 </style>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
 
-<!-- AUTH OVERLAY -->
-<div id="auth-overlay">
-  <div class="auth-screen">
-    <div class="auth-brand-eye">Smart Duka</div>
-    <div class="auth-brand-name">Smart <em>Duka</em></div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="authSetTab('login')">Sign In</button>
-      <button class="auth-tab" id="tab-signup" onclick="authSetTab('signup')">Sign Up</button>
-    </div>
-    <div id="login-fields">
-      <div class="auth-input-group"><label>Email</label><input type="email" id="login-email" placeholder="shop@example.com"></div>
-      <div class="auth-input-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div>
-    </div>
-    <div id="signup-fields" style="display:none;">
-      <div class="auth-input-group"><label>Shop Name</label><input type="text" id="signup-shopname" placeholder="My Duka"></div>
-      <div class="auth-input-group"><label>Email</label><input type="email" id="signup-email" placeholder="shop@example.com"></div>
-      <div class="auth-input-group"><label>Password</label><input type="password" id="signup-password" placeholder="min. 6 characters"></div>
-    </div>
-    <div class="auth-error" id="auth-error"></div>
-    <button class="auth-submit-btn" id="auth-submit-btn" onclick="authSubmit()">Sign In</button>
-    <div class="auth-switch-text" id="auth-switch-msg">Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span></div>
-  </div>
-</div>
+<div id="auth-overlay"><div class="auth-screen"><div class="auth-brand-eye">Smart Duka</div><div class="auth-brand-name">Smart <em>Duka</em></div><div class="auth-tabs"><button class="auth-tab active" id="tab-login" onclick="authSetTab('login')">Sign In</button><button class="auth-tab" id="tab-signup" onclick="authSetTab('signup')">Sign Up</button></div><div id="login-fields"><div class="auth-input-group"><label>Email</label><input type="email" id="login-email" placeholder="shop@example.com"></div><div class="auth-input-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div></div><div id="signup-fields" style="display:none;"><div class="auth-input-group"><label>Shop Name</label><input type="text" id="signup-shopname" placeholder="My Duka"></div><div class="auth-input-group"><label>Email</label><input type="email" id="signup-email" placeholder="shop@example.com"></div><div class="auth-input-group"><label>Password</label><input type="password" id="signup-password" placeholder="min. 6 characters"></div></div><div class="auth-error" id="auth-error"></div><button class="auth-submit-btn" id="auth-submit-btn" onclick="authSubmit()">Sign In</button><div class="auth-switch-text" id="auth-switch-msg">Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span></div></div></div>
 
-<!-- MAIN APP (clients panel + report modal) -->
 <div id="app" style="display:none;">
-<div id="hdr">
-  <div class="hdr-row">
-    <div>
-      <div class="brand-eye">Smart Duka</div>
-      <div class="brand-name"><span id="shop-name-display">My Shop</span></div>
-    </div>
-    <div class="header-buttons">
-      <button class="report-btn" onclick="openReportModal()">📊 Reports</button>
-      <button class="logout-btn" onclick="authLogout()" title="Sign out">↪</button>
-    </div>
-  </div>
-</div>
-<div id="content">
-  <div id="pane-customers" class="pane on">
-    <div class="phdr">
-      <div><div class="plbl">Client Deck</div><div class="ptotal" id="p-cust">0 Accounts</div></div>
-      <button class="addbtn" onclick="openModal('addCustomer')">＋ Add Client</button>
-    </div>
-    <div class="cust-alert-banner" id="cust-alert">⚠️ <span id="cust-alert-text"></span></div>
-    <div class="cust-search-box"><span>🔍</span><input type="text" id="cust-search-input" placeholder="Search by name or phone..." oninput="filterCustomers()"></div>
-    <div class="cust-filter-row"><button class="cf-btn on" id="cf-all" onclick="setCustFilter('all')">All</button><button class="cf-btn" id="cf-debt" onclick="setCustFilter('debt')">Has Debt</button><button class="cf-btn" id="cf-clear" onclick="setCustFilter('clear')">Cleared</button></div>
-    <div id="cust-list"></div>
-  </div>
-</div>
+<div id="hdr"><div class="hdr-row"><div><div class="brand-eye">Smart Duka</div><div class="brand-name"><span id="shop-name-display">My Shop</span></div></div><div class="header-buttons"><button class="report-btn" onclick="openReportModal()">📊 Reports</button><button class="logout-btn" onclick="authLogout()">↪</button></div></div></div>
+<div id="content"><div id="pane-customers" class="pane on"><div class="phdr"><div><div class="plbl">Client Deck</div><div class="ptotal" id="p-cust">0 Accounts</div></div><button class="addbtn" onclick="openModal('addCustomer')">＋ Add Client</button></div><div class="cust-alert-banner" id="cust-alert">⚠️ <span id="cust-alert-text"></span></div><div class="cust-search-box"><span>🔍</span><input type="text" id="cust-search-input" placeholder="Search..." oninput="filterCustomers()"></div><select id="filter-dropdown" class="filter-dropdown" onchange="setCustFilter(this.value)"><option value="all">👥 All Clients</option><option value="debt">⚠️ Has Debt</option><option value="clear">✅ Cleared</option></select><div id="cust-list"></div></div></div>
 </div>
 
-<!-- Report Modal -->
+<!-- MODALS (with + and - buttons for amount in payment & credit modals) -->
 <div class="moverlay" id="mo-report"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Share Report</div><button class="mclose" onclick="cm('report')">✕</button></div><div class="report-buttons"><button class="whatsapp-btn" onclick="shareReport('daily')"><span>📅</span> Daily Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('weekly')"><span>📆</span> Weekly Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('monthly')"><span>📊</span> Monthly Report (WhatsApp)</button></div></div></div>
+<div class="moverlay" id="mo-overduePicker"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Set Overdue Date</div><button class="mclose" onclick="cm('overduePicker')">✕</button></div><div class="fld"><label>Last Credit Date</label><input type="date" id="overdue-date-input"></div><div class="fld"><label>Manual Days</label><input type="number" id="overdue-days-manual" placeholder="Days overdue"></div><button class="sbtn bl" onclick="applyOverdueDate()">Apply</button></div></div>
+<div class="moverlay" id="mo-addCustomer"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Add Client</div><button class="mclose" onclick="cm('addCustomer')">✕</button></div><div class="fld"><label>Full Name</label><input type="text" id="cn-name"></div><div class="fld"><label>Phone</label><input type="tel" id="cn-phone"></div><button class="sbtn bl" onclick="addCustomer()">Add →</button></div></div>
+<div class="moverlay" id="mo-custDetail"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Profile</div><button class="mclose" onclick="cm('custDetail')">✕</button><div class="cd-hero"><div class="cd-name-lbl" id="cd-name">—</div><div class="cd-phone-lbl" id="cd-phone">—</div><div class="cd-stats-grid"><div class="cd-stat"><div class="cd-stat-lbl">Balance</div><div class="cd-stat-val" id="cd-balance">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Total Spent</div><div class="cd-stat-val" id="cd-spent">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Credit</div><div class="cd-stat-val" id="cd-credit">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Payments</div><div class="cd-stat-val" id="cd-debit">KES 0</div></div></div></div><div class="cd-actions"><button class="cd-act-btn pay" onclick="openRecordPayment()">✅ Payment</button><button class="cd-act-btn credit" onclick="openSellCredit()">+ Credit</button></div><div id="cd-txns" class="cd-txn-list"></div><button class="sbtn rd" onclick="deleteCurrentCustomer()">Delete</button></div></div>
 
-<!-- Overdue Date Picker Modal -->
-<div class="moverlay" id="mo-overduePicker"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Set Overdue Date</div><button class="mclose" onclick="cm('overduePicker')">✕</button></div><div class="fld"><label>Select Last Credit Date</label><input type="date" id="overdue-date-input"></div><div class="fld"><label>Or Manually Enter Days Overdue</label><input type="number" id="overdue-days-manual" placeholder="Days overdue" min="0"></div><button class="sbtn bl" onclick="applyOverdueDate()">Apply →</button></div></div>
+<!-- RECORD PAYMENT MODAL with + and - buttons -->
+<div class="moverlay" id="mo-recordPayment"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Record Payment</div><button class="mclose" onclick="cm('recordPayment')">✕</button></div><div style="background:rgba(10,145,103,0.07); border-radius:var(--r2); padding:14px; margin-bottom:20px"><div style="font-size:9.5px; color:var(--muted);">Outstanding Balance</div><div style="font-family:var(--serif); font-size:28px;" id="rp-balance-display">KES 0</div></div>
+<div class="fld"><label>Amount (KES)</label>
+  <div class="modal-stepper">
+    <button class="stepper-btn" onclick="stepModalAmount('rp-amount', -100)">−</button>
+    <input type="number" id="rp-amount" class="stepper-input" value="0" step="100">
+    <button class="stepper-btn" onclick="stepModalAmount('rp-amount', 100)">+</button>
+  </div>
+</div>
+<div class="fld"><label>Note (optional)</label><input type="text" id="rp-note" placeholder="e.g., Cash payment"></div>
+<button class="sbtn gn" onclick="recordPayment()">Record Payment ✓</button></div></div>
 
-<!-- Client Modals -->
-<div class="moverlay" id="mo-addCustomer"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Add Client</div><button class="mclose" onclick="cm('addCustomer')">✕</button></div><div class="fld"><label>Full Name</label><input type="text" id="cn-name"></div><div class="fld"><label>Phone (optional)</label><input type="tel" id="cn-phone"></div><button class="sbtn bl" onclick="addCustomer()">Add Client →</button></div></div>
-<div class="moverlay" id="mo-custDetail"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Client Profile</div><button class="mclose" onclick="cm('custDetail')">✕</button><div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px;"><button class="refresh-overdue-btn" onclick="refreshOverdueForCustomer(selectedCustomerId)">⟳ Recalc from Txns</button><button class="set-overdue-btn" onclick="openOverduePicker(selectedCustomerId)">📅 Set Overdue Date</button></div><div class="cd-hero"><div class="cd-name-lbl" id="cd-name">—</div><div class="cd-phone-lbl" id="cd-phone" style="font-size:12px;color:var(--muted);margin-bottom:14px;">—</div><div class="cd-stats-grid"><div class="cd-stat"><div class="cd-stat-lbl">Balance</div><div class="cd-stat-val" id="cd-balance">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Total Spent</div><div class="cd-stat-val" id="cd-spent">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Credit (Owed)</div><div class="cd-stat-val" id="cd-credit">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Payments Made</div><div class="cd-stat-val" id="cd-debit">KES 0</div></div></div></div><div class="cd-actions"><button class="cd-act-btn pay" onclick="openRecordPayment()">✅ Record Payment</button><button class="cd-act-btn credit" onclick="openSellCredit()">+ Sell on Credit</button></div><div class="sec-lbl">Transaction History</div><div id="cd-txns" class="cd-txn-list"></div><button class="sbtn rd" style="margin-top:20px;background:rgba(229,69,98,0.1);border:1px solid rgba(229,69,98,0.2);color:#FB8097;" onclick="deleteCurrentCustomer()">🗑 Remove Client</button></div></div>
-<div class="moverlay" id="mo-recordPayment"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Record Payment</div><button class="mclose" onclick="cm('recordPayment')">✕</button></div><div style="background:rgba(10,145,103,0.07);border-radius:var(--r2);padding:14px;margin-bottom:20px"><div style="font-size:9.5px;color:var(--muted);">Outstanding Balance</div><div style="font-family:var(--serif);font-size:28px;" id="rp-balance-display">KES 0</div></div><div class="fld"><label>Amount (KES)</label><input type="number" id="rp-amount"></div><div class="fld"><label>Note (optional)</label><input type="text" id="rp-note" placeholder="e.g., Cash payment"></div><button class="sbtn gn" onclick="recordPayment()">Record Payment ✓</button></div></div>
-<div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05);border-radius:var(--r2);padding:14px;margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div><div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div><div class="fld"><label>Amount (KES)</label><input type="number" id="sc-amount"></div><button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
+<!-- SELL ON CREDIT MODAL with + and - buttons -->
+<div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05); border-radius:var(--r2); padding:14px; margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div>
+<div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div>
+<div class="fld"><label>Amount (KES)</label>
+  <div class="modal-stepper">
+    <button class="stepper-btn" onclick="stepModalAmount('sc-amount', -100)">−</button>
+    <input type="number" id="sc-amount" class="stepper-input" value="0" step="100">
+    <button class="stepper-btn" onclick="stepModalAmount('sc-amount', 100)">+</button>
+  </div>
+</div>
+<button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// Full client management + overdue + WhatsApp reports (including client list)
-let customers = [], customerTransactions = [], sales = [], products = [], expenses = [];
-let custFilter = 'all', custSearch = '', selectedCustomerId = null;
-let pendingOverdueCid = null;
+// Core: collapsible cards, steppers, history, and modal +/-
+let customers = [], customerTransactions = [];
+let custFilter = 'all', custSearch = '';
+let selectedCustomerId = null, pendingOverdueCid = null;
 let db = null, currentUser = null;
+let clientHistory = new Map(); // clientId -> array of {timestamp, name, credit, debit}
 
-// Report helper: includes client list (all clients, up to 15, with balance)
+// Helper: step amount in modal inputs
+function stepModalAmount(inputId, delta) {
+  let inp = document.getElementById(inputId);
+  if(inp) {
+    let val = parseFloat(inp.value) || 0;
+    let newVal = val + delta;
+    if(newVal < 0) newVal = 0;
+    inp.value = newVal;
+  }
+}
+
+// Helpers
+const fmt = n => 'KES ' + (n||0).toLocaleString('en-KE');
+const fmtShort = n => { let v = Math.abs(n||0); return v>=1000?(n<0?'-':'')+(v/1000).toFixed(1)+'K':String(Math.round(n||0)); };
+function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+async function recalcCustomerFromTransactions(cust) {
+  let creditSum = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'credit').reduce((s,t)=>s+t.amount,0);
+  let debitSum = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'debit').reduce((s,t)=>s+t.amount,0);
+  cust.credit = creditSum;
+  cust.debit = debitSum;
+  cust.balance = creditSum - debitSum;
+  cust.totalSpent = creditSum;
+  await updateItem('customers', cust);
+}
+
+async function updateFullCustomer(cid, name, phone, creditVal, paidVal, overdueDaysVal) {
+  let cust = customers.find(c=>c.id===cid);
+  if(!cust) return;
+  let history = clientHistory.get(cid) || [];
+  history.unshift({ timestamp: new Date(), name: cust.name, credit: cust.credit, debit: cust.debit });
+  clientHistory.set(cid, history);
+  
+  cust.name = name.trim() || cust.name;
+  cust.phone = phone.trim() || '';
+  cust.credit = parseFloat(creditVal)||0;
+  cust.debit = parseFloat(paidVal)||0;
+  cust.balance = cust.credit - cust.debit;
+  cust.totalSpent = cust.credit;
+  let od = parseInt(overdueDaysVal);
+  if(!isNaN(od) && od>=0) cust.manualOverdueDays = od;
+  else delete cust.manualOverdueDays;
+  cust.lastActivity = new Date().toISOString();
+  await updateItem('customers', cust);
+  await refreshData();
+  renderCustomers();
+}
+
+function computeOverdueDays(cust) {
+  if(cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null) return cust.manualOverdueDays;
+  const creditTxns = customerTransactions.filter(t=>t.customerId===cust.id && t.type==='credit').sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(creditTxns.length===0) return 0;
+  let diff = Math.floor((new Date() - new Date(creditTxns[0].date))/86400000);
+  return diff>0?diff:0;
+}
+
+function stepValue(inputId, delta, custId, fieldType) {
+  let inp = document.getElementById(inputId);
+  if(inp) {
+    let val = parseFloat(inp.value) || 0;
+    let newVal = val + delta;
+    if(fieldType === 'overdue' && newVal < 0) newVal = 0;
+    if((fieldType === 'credit' || fieldType === 'paid') && newVal < 0) newVal = 0;
+    inp.value = newVal;
+    previewBalance(custId);
+  }
+}
+function previewBalance(custId) {
+  let cred = parseFloat(document.getElementById(`cred_${custId}`)?.value)||0;
+  let paid = parseFloat(document.getElementById(`paid_${custId}`)?.value)||0;
+  let previewSpan = document.getElementById(`balPreview_${custId}`);
+  if(previewSpan) {
+    previewSpan.textContent = `Balance: ${fmt(cred - paid)}`;
+    previewSpan.className = `balance-preview ${(cred-paid)>0?'debt':'clear'}`;
+  }
+}
+function toggleCard(cid) { document.getElementById(`card_${cid}`).classList.toggle('expanded'); }
+
+function renderCustomers() {
+  let filtered = customers.filter(c => {
+    if(custFilter === 'debt') return (c.balance||0) > 0;
+    if(custFilter === 'clear') return (c.balance||0) === 0;
+    return true;
+  }).filter(c => c.name.toLowerCase().includes(custSearch) || (c.phone||'').includes(custSearch));
+  document.getElementById('p-cust').textContent = customers.length + ' Client' + (customers.length!==1?'s':'');
+  let highDebt = customers.filter(c=>(c.balance||0)>1000);
+  let alertEl = document.getElementById('cust-alert');
+  if(highDebt.length) { alertEl.classList.add('show'); document.getElementById('cust-alert-text').innerHTML = `⚠️ High balance: ${highDebt.map(c=>c.name).join(', ')}`; } 
+  else alertEl.classList.remove('show');
+  if(!filtered.length) { document.getElementById('cust-list').innerHTML = `<div class="empty-state"><div>👥</div><div>${customers.length?'No matches':'No clients yet'}</div></div>`; return; }
+  let html = '';
+  for(let c of filtered) {
+    let hasDebt = (c.balance||0) > 0;
+    let overdue = hasDebt ? computeOverdueDays(c) : 0;
+    let overdueBadge = '';
+    if(hasDebt && overdue>0) overdueBadge = `<span class="overdue-badge ${overdue>=30?'severe':''}">⚠️ ${overdue}d</span>`;
+    let history = clientHistory.get(c.id) || [];
+    let historyHtml = '';
+    if(history.length) {
+      historyHtml = `<div class="history-log"><div class="history-title">📜 UPDATE HISTORY (${history.length})</div>${history.map(h => `<div class="history-entry">📅 ${new Date(h.timestamp).toLocaleTimeString()} · <span>${escapeHtml(h.name)}</span> | Credit: ${fmt(h.credit)} | Paid: ${fmt(h.debit)}</div>`).join('')}</div>`;
+    }
+    html += `<div class="cust-item ${hasDebt?'has-debt':''}" id="card_${c.id}">
+      <div class="cust-header" onclick="toggleCard(${c.id})">
+        <div class="cust-header-left">
+          <div class="cust-name-header">${escapeHtml(c.name)} ${overdueBadge}</div>
+          <div class="cust-phone-header">${c.phone||'—'}</div>
+        </div>
+        <div class="cust-balance-badge">
+          <div class="cust-bal-num ${hasDebt?'debt':'clear'}">${fmtShort(c.balance)}</div>
+          <div class="cust-bal-lbl">${hasDebt?'owes':'clear'}</div>
+        </div>
+        <div class="expand-icon">▼</div>
+      </div>
+      <div class="cust-details">
+        <div class="cust-edit-row">
+          <div class="cust-edit-field"><label>NAME</label><input type="text" id="name_${c.id}" value="${escapeHtml(c.name)}" class="cust-name-edit"></div>
+          <div class="cust-edit-field"><label>PHONE</label><input type="text" id="phone_${c.id}" value="${escapeHtml(c.phone||'')}" class="cust-phone-edit"></div>
+        </div>
+        <div class="cust-edit-row">
+          <div class="cust-edit-field"><label>CREDIT (OWED)</label><div class="stepper-group"><button class="stepper-btn" onclick="stepValue('cred_${c.id}', -100, ${c.id}, 'credit')">−</button><input type="number" id="cred_${c.id}" value="${c.credit||0}" class="stepper-input" step="any" onchange="previewBalance(${c.id})"><button class="stepper-btn" onclick="stepValue('cred_${c.id}', 100, ${c.id}, 'credit')">+</button></div></div>
+          <div class="cust-edit-field"><label>PAYMENTS MADE</label><div class="stepper-group"><button class="stepper-btn" onclick="stepValue('paid_${c.id}', -100, ${c.id}, 'paid')">−</button><input type="number" id="paid_${c.id}" value="${c.debit||0}" class="stepper-input" step="any" onchange="previewBalance(${c.id})"><button class="stepper-btn" onclick="stepValue('paid_${c.id}', 100, ${c.id}, 'paid')">+</button></div></div>
+          <div class="cust-edit-field"><label>OVERDUE DAYS</label><div class="stepper-group"><button class="stepper-btn" onclick="stepValue('over_${c.id}', -1, ${c.id}, 'overdue')">−</button><input type="number" id="over_${c.id}" value="${c.manualOverdueDays!==undefined?c.manualOverdueDays:computeOverdueDays(c)}" class="stepper-input" step="1"><button class="stepper-btn" onclick="stepValue('over_${c.id}', 1, ${c.id}, 'overdue')">+</button></div></div>
+        </div>
+        <div class="balance-preview ${hasDebt?'debt':'clear'}" id="balPreview_${c.id}">Balance: ${fmt(c.balance)}</div>
+        ${historyHtml}
+        <div class="cust-action-btns">
+          <button class="cust-update-btn" onclick="updateFullCustomer(${c.id}, document.getElementById('name_${c.id}').value, document.getElementById('phone_${c.id}').value, document.getElementById('cred_${c.id}').value, document.getElementById('paid_${c.id}').value, document.getElementById('over_${c.id}').value)">✓ SAVE CHANGES</button>
+          <button class="cust-delete-btn" onclick="deleteCustomerWithTransactions(${c.id})">🗑 DELETE</button>
+          <button class="refresh-overdue-btn" onclick="refreshOverdueForCustomer(${c.id})">⟳ RECALC</button>
+          <button class="set-overdue-btn" onclick="openOverduePicker(${c.id})">📅 SET DATE</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('cust-list').innerHTML = html;
+}
+
+// --- REPORT FUNCTION ---
 async function shareReport(period) {
   const shop = currentUser?.shopName || 'Smart Duka';
   const now = new Date();
   let periodLabel = '';
-  if (period === 'daily') {
-    periodLabel = 'Daily Report - ' + now.toLocaleDateString();
-  } else if (period === 'weekly') {
-    let startDate = new Date(now);
-    startDate.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
-    periodLabel = `Weekly Report (${startDate.toLocaleDateString()} - ${now.toLocaleDateString()})`;
+  if(period === 'daily') {
+    periodLabel = `Daily Report - ${now.toLocaleDateString()}`;
+  } else if(period === 'weekly') {
+    let start = new Date(now);
+    start.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
+    periodLabel = `Weekly Report (${start.toLocaleDateString()} - ${now.toLocaleDateString()})`;
   } else {
     periodLabel = `Monthly Report - ${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
   }
-  
-  const activeClients = customers.length;
-  const totalOutstandingDebt = customers.reduce((sum, c) => sum + (c.balance || 0), 0);
-  
-  // Build client list (all clients sorted by balance desc, show balance)
-  let clientLines = customers.map(c => {
+  const totalClients = customers.length;
+  const totalDebt = customers.reduce((sum, c) => sum + (c.balance || 0), 0);
+  const debtors = customers.filter(c => (c.balance || 0) > 0).length;
+  let clientLines = customers.slice(0, 15).map(c => {
     let bal = c.balance || 0;
-    let balStr = bal === 0 ? 'Cleared' : fmt(bal);
-    return `• ${c.name}: ${balStr}`;
+    let status = bal === 0 ? '✓ Cleared' : `💸 ${fmt(bal)}`;
+    return `• ${c.name}: ${status}`;
   });
-  // Limit to first 15 to avoid message length issues
-  let clientListText = '';
-  if (clientLines.length === 0) {
-    clientListText = 'No clients registered.';
-  } else if (clientLines.length <= 15) {
-    clientListText = clientLines.join('\n');
-  } else {
-    clientListText = clientLines.slice(0, 15).join('\n') + `\n... and ${clientLines.length - 15} more clients.`;
-  }
-  
-  const msg = `*${shop}*\n📋 ${periodLabel}\n👥 Active Clients: ${activeClients}\n💳 Total Outstanding Debt: ${fmt(totalOutstandingDebt)}\n\n📋 *Client List:*\n${clientListText}`;
-  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank');
+  if(customers.length === 0) clientLines = ['No clients registered.'];
+  let clientListText = clientLines.join('\n');
+  if(customers.length > 15) clientListText += `\n... and ${customers.length - 15} more clients.`;
+  const msg = `*${shop}*\n📋 ${periodLabel}\n👥 Total Clients: ${totalClients}\n💳 Total Outstanding Debt: ${fmt(totalDebt)}\n⚠️ Clients with Debt: ${debtors}\n\n📋 *Client List:*\n${clientListText}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 function openReportModal() { openModal('report'); }
 
-// Overdue calculation helpers
-function computeOverdueDays(cust) {
-  if (cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null && cust.manualOverdueDays >= 0) return cust.manualOverdueDays;
-  const creditTxns = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'credit').sort((a,b)=>new Date(b.date)-new Date(a.date));
-  if (creditTxns.length === 0) return 0;
-  const diffDays = Math.floor((new Date() - new Date(creditTxns[0].date)) / (86400000));
-  return diffDays > 0 ? diffDays : 0;
+// Database operations (IndexedDB)
+async function getAll(store) { return new Promise((res,rej)=>{const r=db.transaction(store,'readonly').objectStore(store).getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
+async function updateItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).put(item); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
+async function deleteItem(store,id) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).delete(id); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
+async function addItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).add(item); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
+async function loadData() { customers = await getAll('customers'); customerTransactions = await getAll('customerTransactions'); }
+async function refreshData() { await loadData(); renderCustomers(); }
+async function deleteCustomerWithTransactions(cid) {
+  if(!confirm('Delete client & all history?')) return;
+  await deleteItem('customers', cid);
+  let txns = customerTransactions.filter(t=>t.customerId===cid);
+  for(let t of txns) await deleteItem('customerTransactions', t.id);
+  clientHistory.delete(cid);
+  if(selectedCustomerId===cid) selectedCustomerId=null;
+  await refreshData(); cm('custDetail');
 }
-async function refreshOverdueForCustomer(custId) {
-  let cust = customers.find(c => c.id === custId);
-  if (!cust) return;
+async function refreshOverdueForCustomer(cid) {
+  let cust = customers.find(c=>c.id===cid);
+  if(!cust) return;
   delete cust.manualOverdueDays;
-  await updateItem('customers', cust);
+  await recalcCustomerFromTransactions(cust);
   await refreshData();
-  if (selectedCustomerId === custId) viewCustomer(custId);
+  if(selectedCustomerId===cid) viewCustomer(cid);
   renderCustomers();
 }
-function openOverduePicker(custId) { pendingOverdueCid = custId; document.getElementById('overdue-date-input').value = ''; document.getElementById('overdue-days-manual').value = ''; openModal('overduePicker'); }
-async function applyOverdueDate() {
-  if (!pendingOverdueCid) return;
-  let cust = customers.find(c => c.id === pendingOverdueCid);
-  if (!cust) { cm('overduePicker'); return; }
-  let dateStr = document.getElementById('overdue-date-input').value;
-  let manualDays = parseInt(document.getElementById('overdue-days-manual').value);
-  if (dateStr) {
-    let selectedDate = new Date(dateStr);
-    let days = Math.floor((new Date() - selectedDate) / 86400000);
-    if (days < 0) days = 0;
-    cust.manualOverdueDays = days;
-  } else if (!isNaN(manualDays) && manualDays >= 0) {
-    cust.manualOverdueDays = manualDays;
-  } else { alert('Please select a date or enter days overdue'); return; }
-  await updateItem('customers', cust);
+function viewCustomer(id) {
+  let cust = customers.find(c=>c.id===id);
+  if(!cust) return;
+  selectedCustomerId = id;
+  document.getElementById('cd-name').textContent = cust.name;
+  document.getElementById('cd-phone').textContent = cust.phone||'';
+  document.getElementById('cd-balance').textContent = fmt(cust.balance);
+  document.getElementById('cd-spent').textContent = fmt(cust.totalSpent);
+  document.getElementById('cd-credit').textContent = fmt(cust.credit);
+  document.getElementById('cd-debit').textContent = fmt(cust.debit);
+  let txns = customerTransactions.filter(t=>t.customerId===id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('cd-txns').innerHTML = txns.map(t=>`<div class="cd-txn"><div><div class="cd-txn-type">${t.type==='credit'?'↑ Credit':(t.type==='sale'?'💰 Sale':'↓ Payment')}</div><div class="cd-txn-note">${escapeHtml(t.note||'—')}</div><div class="cd-txn-date">${new Date(t.date).toLocaleDateString()}</div></div><div class="cd-txn-amt">${t.type==='credit'?'+':'-'}${fmt(t.amount)}</div></div>`).join('')||'<div>No transactions</div>';
+  openModal('custDetail');
+}
+async function recordPayment() {
+  let amt = parseFloat(document.getElementById('rp-amount').value);
+  if(!amt||amt<=0) return alert('Valid amount');
+  let cust = customers.find(c=>c.id===selectedCustomerId);
+  if(!cust) return;
+  let actual = Math.min(amt, cust.balance||0);
+  if(actual<=0) return alert('No debt to clear');
+  await addItem('customerTransactions',{customerId:selectedCustomerId,type:'debit',amount:actual,note:document.getElementById('rp-note').value||'Payment',date:new Date().toISOString()});
+  await recalcCustomerFromTransactions(cust);
   await refreshData();
-  if (selectedCustomerId === pendingOverdueCid) viewCustomer(pendingOverdueCid);
-  renderCustomers();
+  cm('recordPayment');
+  if(selectedCustomerId) viewCustomer(selectedCustomerId);
+}
+async function sellOnCredit() {
+  let note = document.getElementById('sc-note').value.trim();
+  let amt = parseFloat(document.getElementById('sc-amount').value);
+  if(!note||!amt||amt<=0) return alert('Fill item and amount');
+  let cust = customers.find(c=>c.id===selectedCustomerId);
+  if(!cust) return;
+  await addItem('customerTransactions',{customerId:selectedCustomerId,type:'credit',amount:amt,note,date:new Date().toISOString()});
+  await recalcCustomerFromTransactions(cust);
+  await refreshData();
+  cm('sellCredit');
+  if(selectedCustomerId) viewCustomer(selectedCustomerId);
+}
+function openRecordPayment() { 
+  let cust = customers.find(c=>c.id===selectedCustomerId);
+  if(cust) document.getElementById('rp-balance-display').textContent = fmt(cust.balance);
+  document.getElementById('rp-amount').value = '';
+  openModal('recordPayment'); 
+  cm('custDetail'); 
+}
+function openSellCredit() { 
+  document.getElementById('sc-cust-name').textContent = customers.find(c=>c.id===selectedCustomerId)?.name||'';
+  document.getElementById('sc-note').value = '';
+  document.getElementById('sc-amount').value = '';
+  openModal('sellCredit'); 
+  cm('custDetail'); 
+}
+function deleteCurrentCustomer() { if(selectedCustomerId) deleteCustomerWithTransactions(selectedCustomerId); }
+async function addCustomer() {
+  let name = document.getElementById('cn-name').value.trim();
+  if(!name) return alert('Name required');
+  await addItem('customers',{name, phone:document.getElementById('cn-phone').value.trim(), totalSpent:0,credit:0,debit:0,balance:0,lastActivity:new Date().toISOString()});
+  await refreshData();
+  cm('addCustomer');
+  document.getElementById('cn-name').value='';
+  document.getElementById('cn-phone').value='';
+}
+function openOverduePicker(cid) { pendingOverdueCid = cid; openModal('overduePicker'); }
+async function applyOverdueDate() {
+  if(!pendingOverdueCid) return;
+  let cust = customers.find(c=>c.id===pendingOverdueCid);
+  if(!cust) return;
+  let dateStr = document.getElementById('overdue-date-input').value;
+  let manual = parseInt(document.getElementById('overdue-days-manual').value);
+  if(dateStr) {
+    let days = Math.floor((new Date() - new Date(dateStr))/86400000);
+    if(days<0) days=0;
+    cust.manualOverdueDays = days;
+  } else if(!isNaN(manual) && manual>=0) cust.manualOverdueDays = manual;
+  else { alert('Enter date or days'); return; }
+  await updateItem('customers',cust);
+  await refreshData();
   cm('overduePicker');
   pendingOverdueCid = null;
 }
-
-// IndexedDB helpers (unchanged)
-async function getAll(store) { return new Promise((res,rej)=>{const r=db.transaction(store,'readonly').objectStore(store).getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
-async function addItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).add(item); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
-async function updateItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).put(item); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
-async function deleteItem(store,id) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).delete(id); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
-async function loadData() { customers = await getAll('customers'); customerTransactions = await getAll('customerTransactions'); sales = await getAll('sales'); products = await getAll('products'); expenses = await getAll('expenses'); }
-async function refreshData() { await loadData(); renderCustomers(); }
-
-const fmt = n => 'KES ' + Number(n||0).toLocaleString('en-KE',{maximumFractionDigits:0});
-const fmtShort = n => { let v = Math.abs(n||0); return v>=1000?(n<0?'-':'')+(v/1000).toFixed(1)+'K':String(Math.round(n||0)); };
-function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { if (m==='&') return '&amp;'; if (m==='<') return '&lt;'; if (m==='>') return '&gt;'; return m; }); }
-
-function renderCustomers() {
-  let list = customers.filter(c => {
-    if (custFilter === 'debt') return (c.balance||0) > 0;
-    if (custFilter === 'clear') return (c.balance||0) === 0;
-    return true;
-  }).filter(c => c.name.toLowerCase().includes(custSearch) || (c.phone||'').includes(custSearch)).sort((a,b)=>(b.totalSpent||0)-(a.totalSpent||0));
-  document.getElementById('p-cust').textContent = customers.length + ' Client' + (customers.length!==1?'s':'');
-  let highDebt = customers.filter(c=>(c.balance||0)>1000);
-  let alertEl = document.getElementById('cust-alert');
-  if (highDebt.length) { alertEl.classList.add('show'); document.getElementById('cust-alert-text').innerHTML = `⚠️ High balance: <strong>${highDebt.map(c=>c.name).join(', ')}</strong>`; } else alertEl.classList.remove('show');
-  if (!list.length) { document.getElementById('cust-list').innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">${customers.length?'No matching clients':'No clients yet. Click + Add Client'}</div></div>`; return; }
-  document.getElementById('cust-list').innerHTML = list.map(c => {
-    let hasDebt = (c.balance||0) > 0;
-    let overdue = hasDebt ? computeOverdueDays(c) : 0;
-    let overdueBadge = '';
-    if (hasDebt && overdue > 0) { let severe = overdue >= 30; overdueBadge = `<span class="overdue-badge ${severe?'severe':''}">⚠️ ${overdue} day${overdue!==1?'s':''} overdue</span>`; }
-    return `<div class="cust-item ${hasDebt?'has-debt':'cleared'}" onclick="viewCustomer(${c.id})">
-      <div class="cust-item-row"><div class="cust-info">
-        <div class="cust-name">${escapeHtml(c.name)} ${overdueBadge}</div>
-        <div class="cust-phone">${c.phone||'—'}</div>
-        <div class="cust-edit-row" onclick="event.stopPropagation()">
-          <div class="cust-edit-field"><label>Spent (KES)</label><input type="number" id="spent-${c.id}" value="${c.totalSpent||0}"></div>
-          <div class="cust-edit-field"><label>Credit (KES)</label><input type="number" id="credit-${c.id}" value="${c.credit||0}"></div>
-          <div class="cust-edit-field"><label>Paid (KES)</label><input type="number" id="paid-${c.id}" value="${c.debit||0}"></div>
-          <div class="cust-edit-field"><label>Overdue Days</label><input type="number" id="overdue-${c.id}" value="${c.manualOverdueDays!==undefined?c.manualOverdueDays:computeOverdueDays(c)}" min="0"></div>
-        </div>
-        <div class="cust-action-btns" onclick="event.stopPropagation()">
-          <button class="cust-update-btn" onclick="updateCustomerFields(${c.id}, document.getElementById('spent-${c.id}').value, document.getElementById('credit-${c.id}').value, document.getElementById('paid-${c.id}').value, document.getElementById('overdue-${c.id}').value)">✓ Update</button>
-          <button class="cust-delete-btn" onclick="deleteCustomerWithTransactions(${c.id})">🗑 Delete</button>
-          <button class="refresh-overdue-btn" onclick="refreshOverdueForCustomer(${c.id})">⟳ Recalc</button>
-          <button class="set-overdue-btn" onclick="openOverduePicker(${c.id})">📅 Set</button>
-        </div>
-        <div class="cust-stats-row"><span class="cst">Balance: ${fmt(c.balance||0)}</span></div>${(c.balance||0)>1000?'<div class="debt-alert">⚠️ High balance</div>':''}
-      </div><div class="cust-bal"><div class="cust-bal-num ${hasDebt?'debt':'clear'}">${fmtShort(c.balance||0)}</div><div class="cust-bal-lbl">${hasDebt?'owes':'cleared'}</div></div></div>
-    </div>`;
-  }).join('');
-}
-
-async function updateCustomerFields(cid, spentVal, creditVal, paidVal, overdueDaysVal) {
-  let cust = customers.find(c=>c.id===cid); if (!cust) return;
-  cust.totalSpent = parseFloat(spentVal)||0; cust.credit = parseFloat(creditVal)||0; cust.debit = parseFloat(paidVal)||0; cust.balance = cust.credit - cust.debit; cust.lastActivity = new Date().toISOString();
-  let od = parseInt(overdueDaysVal); if (!isNaN(od) && od>=0) cust.manualOverdueDays = od; else delete cust.manualOverdueDays;
-  await updateItem('customers', cust); await refreshData();
-}
-async function deleteCustomerWithTransactions(cid) {
-  if (!confirm('Delete this client and ALL transaction history? Cannot be undone.')) return;
-  await deleteItem('customers', cid);
-  let txns = customerTransactions.filter(t=>t.customerId===cid);
-  for (let t of txns) await deleteItem('customerTransactions', t.id);
-  if (selectedCustomerId===cid) selectedCustomerId=null;
-  await refreshData(); cm('custDetail');
-}
-function viewCustomer(id) {
-  selectedCustomerId=id; let cust=customers.find(c=>c.id===id); if(!cust) return;
-  document.getElementById('cd-name').textContent=cust.name; document.getElementById('cd-phone').textContent=cust.phone||'No phone';
-  let balEl=document.getElementById('cd-balance'); balEl.textContent=fmt(cust.balance||0); balEl.className='cd-stat-val '+((cust.balance||0)>0?'debt':'clear');
-  document.getElementById('cd-spent').textContent=fmt(cust.totalSpent||0); document.getElementById('cd-credit').textContent=fmt(cust.credit||0); document.getElementById('cd-debit').textContent=fmt(cust.debit||0);
-  let txns=customerTransactions.filter(t=>t.customerId===id).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  document.getElementById('cd-txns').innerHTML=txns.length?txns.map(t=>`<div class="cd-txn"><div><div class="cd-txn-type" style="${t.type==='credit'?'color:#FB8097':(t.type==='sale'?'color:var(--gold2)':'color:var(--em2)')}">${t.type==='credit'?'↑ Credit Added':(t.type==='sale'?'💰 Sale':'↓ Payment Received')}</div><div class="cd-txn-note">${escapeHtml(t.note||'—')}</div><div class="cd-txn-date">${new Date(t.date).toLocaleDateString()}</div></div><div class="cd-txn-amt" style="${t.type==='credit'?'color:#FB8097':(t.type==='sale'?'color:var(--gold2)':'color:var(--em2)')}">${t.type==='credit'?'+':(t.type==='sale'?'✓':'-')}${fmt(t.amount)}</div></div>`).join(''):'<div class="empty-state" style="padding:24px;">No transactions yet</div>';
-  openModal('custDetail');
-}
-function openRecordPayment() { let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; document.getElementById('rp-balance-display').textContent=fmt(cust.balance||0); document.getElementById('rp-amount').value=''; document.getElementById('rp-note').value=''; cm('custDetail'); openModal('recordPayment'); }
-function openSellCredit() { let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; document.getElementById('sc-cust-name').textContent=cust.name; document.getElementById('sc-note').value=''; document.getElementById('sc-amount').value=''; cm('custDetail'); openModal('sellCredit'); }
-async function recordPayment() { let amount=parseFloat(document.getElementById('rp-amount').value); let note=document.getElementById('rp-note').value.trim()||'Payment'; if(!amount||amount<=0){alert('Enter valid amount'); return;} let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; let actualAmount=Math.min(amount,cust.balance||0); if(actualAmount<=0){alert('No debt to clear'); return;} await addItem('customerTransactions',{customerId:selectedCustomerId,type:'debit',amount:actualAmount,note,date:new Date().toISOString()}); cust.debit=(cust.debit||0)+actualAmount; cust.balance=(cust.credit||0)-(cust.debit||0); cust.lastActivity=new Date().toISOString(); await updateItem('customers',cust); await refreshData(); cm('recordPayment'); }
-async function sellOnCredit() { let note=document.getElementById('sc-note').value.trim(); let amount=parseFloat(document.getElementById('sc-amount').value); if(!note||!amount||amount<=0){alert('Fill description and amount'); return;} let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; await addItem('sales',{product:note,amount,payment_method:'credit',date:new Date().toISOString(),customerId:selectedCustomerId,customerName:cust.name}); await addItem('customerTransactions',{customerId:selectedCustomerId,type:'credit',amount,note,date:new Date().toISOString()}); cust.credit=(cust.credit||0)+amount; cust.balance=(cust.credit||0)-(cust.debit||0); cust.totalSpent=(cust.totalSpent||0)+amount; cust.lastActivity=new Date().toISOString(); await updateItem('customers',cust); await refreshData(); cm('sellCredit'); }
-async function deleteCurrentCustomer() { if(!selectedCustomerId) return; if(confirm('Delete this client permanently?')){ await deleteItem('customers',selectedCustomerId); let txns=customerTransactions.filter(t=>t.customerId===selectedCustomerId); for(let t of txns) await deleteItem('customerTransactions',t.id); selectedCustomerId=null; cm('custDetail'); await refreshData(); } }
-function setCustFilter(f) { custFilter=f; document.querySelectorAll('.cf-btn').forEach(btn=>btn.classList.remove('on')); document.getElementById(`cf-${f}`).classList.add('on'); renderCustomers(); }
-function filterCustomers() { custSearch=document.getElementById('cust-search-input').value.toLowerCase().trim(); renderCustomers(); }
-async function addCustomer() { let n=document.getElementById('cn-name').value.trim(); if(!n) return alert('Name required'); await addItem('customers',{name:n,phone:document.getElementById('cn-phone').value.trim(),totalSpent:0,credit:0,debit:0,balance:0,lastActivity:new Date().toISOString()}); await refreshData(); cm('addCustomer'); document.getElementById('cn-name').value=''; document.getElementById('cn-phone').value=''; }
+function setCustFilter(f) { custFilter = f; renderCustomers(); }
+function filterCustomers() { custSearch = document.getElementById('cust-search-input').value.toLowerCase(); renderCustomers(); }
 function openModal(t) { document.getElementById(`mo-${t}`).classList.add('on'); }
 function cm(t) { document.getElementById(`mo-${t}`).classList.remove('on'); }
 
-// Auth logic (unchanged)
-const AUTH_SALT='smart_duka_salt_v2',SESSION_KEY='dm_session',USERS_KEY='dm_users';
+// Auth (preserved)
+const AUTH_SALT='salt',SESSION_KEY='dm_session',USERS_KEY='dm_users';
 async function hashPassword(pw){const enc=new TextEncoder(),data=enc.encode(pw+AUTH_SALT),buf=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
 function generateUserId(){return 'user_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);}
 function getUsers(){return JSON.parse(localStorage.getItem(USERS_KEY)||'[]');}
@@ -533,14 +861,14 @@ function getSession(){try{let s=JSON.parse(localStorage.getItem(SESSION_KEY)||'n
 function clearSession(){localStorage.removeItem(SESSION_KEY);currentUser=null;}
 function updateShopNameDisplay(){let el=document.getElementById('shop-name-display');if(el&&currentUser)el.textContent=currentUser.shopName||'Smart Duka';}
 function getUserDBName(uid){return `duka_master_${uid}`;}
-async function openUserDB(uid){return new Promise((res,rej)=>{let r=indexedDB.open(getUserDBName(uid),3);r.onerror=()=>rej(r.error);r.onsuccess=()=>{db=r.result;res(db);};r.onupgradeneeded=(ev)=>{let db=ev.target.result;if(!db.objectStoreNames.contains('products'))db.createObjectStore('products',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('sales'))db.createObjectStore('sales',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('expenses'))db.createObjectStore('expenses',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('customers'))db.createObjectStore('customers',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('customerTransactions')){let cts=db.createObjectStore('customerTransactions',{keyPath:'id',autoIncrement:true});cts.createIndex('customerId','customerId');}};});}
-async function initializeSampleData(){let existing=await getAll('customers');if(existing.length===0){await addItem('customers',{name:'Sarah Wanjiku',phone:'0712 345 678',totalSpent:2500,credit:1500,debit:500,balance:1000,lastActivity:new Date().toISOString(),manualOverdueDays:15});await addItem('customers',{name:'Peter Kamau',phone:'0723 456 789',totalSpent:4200,credit:4200,debit:4200,balance:0,lastActivity:new Date().toISOString()});await addItem('customerTransactions',{customerId:1,type:'credit',amount:1500,note:'Initial credit',date:new Date(Date.now()-15*86400000).toISOString()});await addItem('customerTransactions',{customerId:1,type:'debit',amount:500,note:'Partial payment',date:new Date().toISOString()});}}
-function showApp(){document.getElementById('auth-overlay').classList.add('auth-hide');setTimeout(()=>{document.getElementById('auth-overlay').style.display='none';document.getElementById('app').style.display='flex';},420);renderCustomers();}
+async function openUserDB(uid){return new Promise((res,rej)=>{let r=indexedDB.open(getUserDBName(uid),3);r.onerror=()=>rej(r.error);r.onsuccess=()=>{db=r.result;res(db);};r.onupgradeneeded=(ev)=>{let db=ev.target.result;if(!db.objectStoreNames.contains('customers'))db.createObjectStore('customers',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('customerTransactions')){let cts=db.createObjectStore('customerTransactions',{keyPath:'id',autoIncrement:true});cts.createIndex('customerId','customerId');}if(!db.objectStoreNames.contains('sales'))db.createObjectStore('sales',{keyPath:'id',autoIncrement:true});};});}
+async function initializeSampleData(){let existing=await getAll('customers');if(existing.length===0){await addItem('customers',{name:'Sarah Wanjiku',phone:'0712 345 678',totalSpent:2500,credit:1500,debit:500,balance:1000,lastActivity:new Date().toISOString(),manualOverdueDays:15});await addItem('customers',{name:'Peter Kamau',phone:'0723 456 789',totalSpent:4200,credit:4200,debit:4200,balance:0,lastActivity:new Date().toISOString()});await addItem('customerTransactions',{customerId:1,type:'credit',amount:1500,note:'Initial',date:new Date(Date.now()-15*86400000).toISOString()});await addItem('customerTransactions',{customerId:1,type:'debit',amount:500,note:'Payment',date:new Date().toISOString()});}}
+function showApp(){document.getElementById('auth-overlay').style.display='none';document.getElementById('app').style.display='flex';renderCustomers();}
 let authMode='login';
-function authSetTab(mode){authMode=mode;document.getElementById('tab-login').classList.toggle('active',mode==='login');document.getElementById('tab-signup').classList.toggle('active',mode==='signup');document.getElementById('login-fields').style.display=mode==='login'?'block':'none';document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';document.getElementById('auth-submit-btn').textContent=mode==='login'?'Sign In':'Create Account';document.getElementById('auth-switch-msg').innerHTML=mode==='login'?`Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span>`:`Already have an account? <span class="auth-switch-link" onclick="authSetTab('login')">Sign in</span>`;document.getElementById('auth-error').classList.remove('show');}
+function authSetTab(mode){authMode=mode;document.getElementById('tab-login').classList.toggle('active',mode==='login');document.getElementById('tab-signup').classList.toggle('active',mode==='signup');document.getElementById('login-fields').style.display=mode==='login'?'block':'none';document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';document.getElementById('auth-submit-btn').textContent=mode==='login'?'Sign In':'Create Account';document.getElementById('auth-switch-msg').innerHTML=mode==='login'?`Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span>`:`Already have an account? <span class="auth-switch-link" onclick="authSetTab('login')">Sign in</span>`;}
 function showAuthError(msg){let err=document.getElementById('auth-error');err.textContent=msg;err.classList.add('show');setTimeout(()=>err.classList.remove('show'),4000);}
-async function authSubmit(){let email=(authMode==='login'?document.getElementById('login-email'):document.getElementById('signup-email')).value.trim();let pwd=(authMode==='login'?document.getElementById('login-password'):document.getElementById('signup-password')).value;if(!email||!pwd)return showAuthError('Email and password required');if(authMode==='signup'){let shop=document.getElementById('signup-shopname').value.trim();if(!shop)return showAuthError('Shop name required');if(pwd.length<6)return showAuthError('Password ≥6 characters');let users=getUsers();if(findUserByEmail(email))return showAuthError('Email already registered');let hash=await hashPassword(pwd);let newUser={id:generateUserId(),email:email.toLowerCase(),passwordHash:hash,shopName:shop};users.push(newUser);saveUsers(users);createSession(newUser);await openUserDB(newUser.id);await initializeSampleData();await loadData();showApp();}else{let user=findUserByEmail(email);if(!user)return showAuthError('Invalid email or password');let hash=await hashPassword(pwd);if(hash!==user.passwordHash)return showAuthError('Invalid email or password');createSession(user);await openUserDB(user.id);await loadData();showApp();}}
-async function authLogout(){if(confirm('Sign out of Smart Duka?')){clearSession();db=null;document.getElementById('app').style.display='none';document.getElementById('auth-overlay').style.display='flex';document.getElementById('auth-overlay').classList.remove('auth-hide');authSetTab('login');document.getElementById('login-email').value='';document.getElementById('login-password').value='';document.getElementById('signup-shopname').value='';document.getElementById('signup-email').value='';document.getElementById('signup-password').value='';document.querySelectorAll('.moverlay.on').forEach(m=>m.classList.remove('on'));}}
+async function authSubmit(){let email=(authMode==='login'?document.getElementById('login-email'):document.getElementById('signup-email')).value.trim();let pwd=(authMode==='login'?document.getElementById('login-password'):document.getElementById('signup-password')).value;if(!email||!pwd)return showAuthError('Required');if(authMode==='signup'){let shop=document.getElementById('signup-shopname').value.trim();if(!shop)return showAuthError('Shop name');if(pwd.length<6)return showAuthError('Min 6 chars');let users=getUsers();if(findUserByEmail(email))return showAuthError('Email exists');let hash=await hashPassword(pwd);let newUser={id:generateUserId(),email:email.toLowerCase(),passwordHash:hash,shopName:shop};users.push(newUser);saveUsers(users);createSession(newUser);await openUserDB(newUser.id);await initializeSampleData();await loadData();showApp();}else{let user=findUserByEmail(email);if(!user)return showAuthError('Invalid');let hash=await hashPassword(pwd);if(hash!==user.passwordHash)return showAuthError('Invalid');createSession(user);await openUserDB(user.id);await loadData();showApp();}}
+async function authLogout(){if(confirm('Sign out?')){clearSession();db=null;document.getElementById('app').style.display='none';document.getElementById('auth-overlay').style.display='flex';authSetTab('login');document.querySelectorAll('.moverlay.on').forEach(m=>m.classList.remove('on'));}}
 (async function init(){let sess=getSession();if(sess){await openUserDB(sess.userId);await loadData();showApp();}else{document.getElementById('auth-overlay').style.display='flex';authSetTab('login');}document.querySelectorAll('.moverlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('on');}));})();
 </script>
 </body>
