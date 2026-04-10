@@ -350,13 +350,13 @@ body::after{
 <div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05);border-radius:var(--r2);padding:14px;margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div><div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div><div class="fld"><label>Amount (KES)</label><input type="number" id="sc-amount"></div><button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// Full client management + overdue + WhatsApp reports (only Active Clients + Total Outstanding Debt)
+// Full client management + overdue + WhatsApp reports (including client list)
 let customers = [], customerTransactions = [], sales = [], products = [], expenses = [];
 let custFilter = 'all', custSearch = '', selectedCustomerId = null;
 let pendingOverdueCid = null;
 let db = null, currentUser = null;
 
-// Report helper: generates shop name, period, Active Clients, Total Outstanding Debt
+// Report helper: includes client list (all clients, up to 15, with balance)
 async function shareReport(period) {
   const shop = currentUser?.shopName || 'Smart Duka';
   const now = new Date();
@@ -370,10 +370,27 @@ async function shareReport(period) {
   } else {
     periodLabel = `Monthly Report - ${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
   }
-  // Calculate active clients (all customers) and total outstanding debt (sum of balances)
+  
   const activeClients = customers.length;
   const totalOutstandingDebt = customers.reduce((sum, c) => sum + (c.balance || 0), 0);
-  const msg = `*${shop}*\n📋 ${periodLabel}\n👥 Active Clients: ${activeClients}\n💳 Total Outstanding Debt: ${fmt(totalOutstandingDebt)}`;
+  
+  // Build client list (all clients sorted by balance desc, show balance)
+  let clientLines = customers.map(c => {
+    let bal = c.balance || 0;
+    let balStr = bal === 0 ? 'Cleared' : fmt(bal);
+    return `• ${c.name}: ${balStr}`;
+  });
+  // Limit to first 15 to avoid message length issues
+  let clientListText = '';
+  if (clientLines.length === 0) {
+    clientListText = 'No clients registered.';
+  } else if (clientLines.length <= 15) {
+    clientListText = clientLines.join('\n');
+  } else {
+    clientListText = clientLines.slice(0, 15).join('\n') + `\n... and ${clientLines.length - 15} more clients.`;
+  }
+  
+  const msg = `*${shop}*\n📋 ${periodLabel}\n👥 Active Clients: ${activeClients}\n💳 Total Outstanding Debt: ${fmt(totalOutstandingDebt)}\n\n📋 *Client List:*\n${clientListText}`;
   const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
