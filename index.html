@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Smart Duka · Client Hub + Overdue Tracker</title>
+<title>Smart Duka · Client Hub + Reports</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -63,6 +63,9 @@ body::after{
 .brand-eye{font-size:9px;font-weight:600;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
 .brand-name{font-family:var(--serif);font-size:28px;line-height:1;font-weight:400;color:var(--text);letter-spacing:-0.3px;}
 .brand-name em{color:var(--gold);font-style:italic;font-weight:300;}
+.header-buttons{display:flex;gap:8px;}
+.report-btn{display:flex;align-items:center;gap:6px;background:rgba(200,136,58,0.12);border:1px solid rgba(200,136,58,0.3);color:var(--gold2);border-radius:100px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;}
+.report-btn:active{transform:scale(0.96);}
 .logout-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:50%;cursor:pointer;color:var(--muted2);font-size:15px;transition:all .18s;flex-shrink:0;}
 .logout-btn:active{transform:scale(.88);background:rgba(229,69,98,0.10);border-color:rgba(229,69,98,0.25);color:#FB8097;}
 #content{flex:1;padding:4px 16px 32px;}
@@ -70,7 +73,7 @@ body::after{
 .pane.on{display:flex;animation:su .42s cubic-bezier(.22,1,.36,1);}
 @keyframes su{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
-/* --- AUTHENTICATION STYLES (FIXED) --- */
+/* --- AUTHENTICATION STYLES --- */
 .auth-screen {
   max-width: 340px;
   width: 90%;
@@ -274,10 +277,9 @@ body::after{
 .cd-txn-amt{font-family:var(--serif);font-size:18px;}
 .cd-txn-note{font-size:11px;color:var(--muted2);margin-top:3px;}
 .cd-txn-date{font-size:9px;color:var(--muted);margin-top:4px;}
-.debt-notice-dot{width:8px;height:8px;border-radius:50%;background:#F59E0B;flex-shrink:0;box-shadow:0 0 8px rgba(245,158,11,0.6);}
-/* Overdue date picker modal */
-.overdue-picker-row{display:flex;gap:10px;margin-bottom:15px;}
-.overdue-picker-row input{flex:1;}
+.report-buttons{display:flex;flex-direction:column;gap:12px;margin:20px 0;}
+.whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:40px;padding:14px;color:white;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
+.whatsapp-btn:active{transform:scale(0.97);}
 </style>
 </head>
 <body>
@@ -307,7 +309,7 @@ body::after{
   </div>
 </div>
 
-<!-- MAIN APP (only clients panel) -->
+<!-- MAIN APP (clients panel + report modal) -->
 <div id="app" style="display:none;">
 <div id="hdr">
   <div class="hdr-row">
@@ -315,11 +317,13 @@ body::after{
       <div class="brand-eye">Smart Duka</div>
       <div class="brand-name"><span id="shop-name-display">My Shop</span></div>
     </div>
-    <button class="logout-btn" onclick="authLogout()" title="Sign out">↪</button>
+    <div class="header-buttons">
+      <button class="report-btn" onclick="openReportModal()">📊 Reports</button>
+      <button class="logout-btn" onclick="authLogout()" title="Sign out">↪</button>
+    </div>
   </div>
 </div>
 <div id="content">
-  <!-- CLIENTS PANE (primary dashboard) -->
   <div id="pane-customers" class="pane on">
     <div class="phdr">
       <div><div class="plbl">Client Deck</div><div class="ptotal" id="p-cust">0 Accounts</div></div>
@@ -333,58 +337,89 @@ body::after{
 </div>
 </div>
 
-<!-- Overdue Date Picker Modal (for manual setting) -->
+<!-- Report Modal -->
+<div class="moverlay" id="mo-report"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Share Report</div><button class="mclose" onclick="cm('report')">✕</button></div><div class="report-buttons"><button class="whatsapp-btn" onclick="shareReport('daily')"><span>📅</span> Daily Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('weekly')"><span>📆</span> Weekly Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('monthly')"><span>📊</span> Monthly Report (WhatsApp)</button></div></div></div>
+
+<!-- Overdue Date Picker Modal -->
 <div class="moverlay" id="mo-overduePicker"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Set Overdue Date</div><button class="mclose" onclick="cm('overduePicker')">✕</button></div><div class="fld"><label>Select Last Credit Date</label><input type="date" id="overdue-date-input"></div><div class="fld"><label>Or Manually Enter Days Overdue</label><input type="number" id="overdue-days-manual" placeholder="Days overdue" min="0"></div><button class="sbtn bl" onclick="applyOverdueDate()">Apply →</button></div></div>
 
-<!-- CLIENT MODALS -->
+<!-- Client Modals -->
 <div class="moverlay" id="mo-addCustomer"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Add Client</div><button class="mclose" onclick="cm('addCustomer')">✕</button></div><div class="fld"><label>Full Name</label><input type="text" id="cn-name"></div><div class="fld"><label>Phone (optional)</label><input type="tel" id="cn-phone"></div><button class="sbtn bl" onclick="addCustomer()">Add Client →</button></div></div>
 <div class="moverlay" id="mo-custDetail"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Client Profile</div><button class="mclose" onclick="cm('custDetail')">✕</button><div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px;"><button class="refresh-overdue-btn" onclick="refreshOverdueForCustomer(selectedCustomerId)">⟳ Recalc from Txns</button><button class="set-overdue-btn" onclick="openOverduePicker(selectedCustomerId)">📅 Set Overdue Date</button></div><div class="cd-hero"><div class="cd-name-lbl" id="cd-name">—</div><div class="cd-phone-lbl" id="cd-phone" style="font-size:12px;color:var(--muted);margin-bottom:14px;">—</div><div class="cd-stats-grid"><div class="cd-stat"><div class="cd-stat-lbl">Balance</div><div class="cd-stat-val" id="cd-balance">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Total Spent</div><div class="cd-stat-val" id="cd-spent">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Credit (Owed)</div><div class="cd-stat-val" id="cd-credit">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Payments Made</div><div class="cd-stat-val" id="cd-debit">KES 0</div></div></div></div><div class="cd-actions"><button class="cd-act-btn pay" onclick="openRecordPayment()">✅ Record Payment</button><button class="cd-act-btn credit" onclick="openSellCredit()">+ Sell on Credit</button></div><div class="sec-lbl">Transaction History</div><div id="cd-txns" class="cd-txn-list"></div><button class="sbtn rd" style="margin-top:20px;background:rgba(229,69,98,0.1);border:1px solid rgba(229,69,98,0.2);color:#FB8097;" onclick="deleteCurrentCustomer()">🗑 Remove Client</button></div></div>
 <div class="moverlay" id="mo-recordPayment"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Record Payment</div><button class="mclose" onclick="cm('recordPayment')">✕</button></div><div style="background:rgba(10,145,103,0.07);border-radius:var(--r2);padding:14px;margin-bottom:20px"><div style="font-size:9.5px;color:var(--muted);">Outstanding Balance</div><div style="font-family:var(--serif);font-size:28px;" id="rp-balance-display">KES 0</div></div><div class="fld"><label>Amount (KES)</label><input type="number" id="rp-amount"></div><div class="fld"><label>Note (optional)</label><input type="text" id="rp-note" placeholder="e.g., Cash payment"></div><button class="sbtn gn" onclick="recordPayment()">Record Payment ✓</button></div></div>
 <div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05);border-radius:var(--r2);padding:14px;margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div><div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div><div class="fld"><label>Amount (KES)</label><input type="number" id="sc-amount"></div><button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// Full client management + overdue calculation + manual overdue date setting
+// Full client management + overdue + WhatsApp reports
 let customers = [], customerTransactions = [], sales = [], products = [], expenses = [];
 let custFilter = 'all', custSearch = '', selectedCustomerId = null;
-let pendingOverdueCid = null; // for manual overdue picker
+let pendingOverdueCid = null;
 let db = null, currentUser = null;
 
-// Helper: compute overdue days based on custom field or latest credit transaction
-function computeOverdueDays(cust) {
-  // if manual overdue days stored in cust.overdueDays, use that
-  if (cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null && cust.manualOverdueDays >= 0) {
-    return cust.manualOverdueDays;
+// Report helper: generate message and open WhatsApp
+async function shareReport(period) {
+  const shop = currentUser?.shopName || 'Smart Duka';
+  const now = new Date();
+  let startDate, endDate = new Date();
+  let periodLabel = '';
+  if (period === 'daily') {
+    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    periodLabel = 'Daily Report - ' + now.toLocaleDateString();
+  } else if (period === 'weekly') {
+    startDate = new Date(now);
+    startDate.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1)); // Monday
+    startDate.setHours(0,0,0,0);
+    periodLabel = `Weekly Report (${startDate.toLocaleDateString()} - ${now.toLocaleDateString()})`;
+  } else {
+    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    periodLabel = `Monthly Report - ${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
   }
-  // else compute from latest credit transaction
-  const creditTxns = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'credit').sort((a,b) => new Date(b.date) - new Date(a.date));
-  if (creditTxns.length === 0) return 0;
-  const latestCreditDate = new Date(creditTxns[0].date);
-  const today = new Date();
-  const diffDays = Math.floor((today - latestCreditDate) / (1000 * 60 * 60 * 24));
-  return diffDays > 0 ? diffDays : 0;
+  const filteredSales = sales.filter(s => new Date(s.date) >= startDate && new Date(s.date) <= endDate);
+  const totalSales = filteredSales.reduce((a,b)=>a+b.amount,0);
+  const mpesa = filteredSales.filter(s=>s.payment_method==='mpesa').reduce((a,b)=>a+b.amount,0);
+  const cash = filteredSales.filter(s=>s.payment_method==='cash').reduce((a,b)=>a+b.amount,0);
+  const credit = filteredSales.filter(s=>s.payment_method==='credit').reduce((a,b)=>a+b.amount,0);
+  const expensesFiltered = expenses.filter(e => new Date(e.date) >= startDate && new Date(e.date) <= endDate);
+  const totalExp = expensesFiltered.reduce((a,b)=>a+b.amount,0);
+  const profit = Math.round(totalSales * 0.28) - totalExp;
+  const overdueClients = customers.filter(c => (c.balance||0) > 0 && computeOverdueDays(c) > 0).slice(0,5);
+  let overdueText = overdueClients.length ? '\n⚠️ Overdue clients:\n' + overdueClients.map(c => `• ${c.name}: ${fmtShort(c.balance)} (${computeOverdueDays(c)} days)`).join('\n') : '\n✅ No overdue clients';
+  const msg = `*${shop} - ${periodLabel}*\n` +
+              `📅 Date: ${new Date().toLocaleDateString()}\n` +
+              `💰 Total Sales: ${fmt(totalSales)}\n` +
+              `📱 M-Pesa: ${fmt(mpesa)}\n` +
+              `💵 Cash: ${fmt(cash)}\n` +
+              `⚠️ Credit: ${fmt(credit)}\n` +
+              `💸 Expenses: ${fmt(totalExp)}\n` +
+              `📈 Net Profit: ${profit>=0?'+':'-'}${fmt(Math.abs(profit))}\n` +
+              `👥 Active Clients: ${customers.length}\n` +
+              `💳 Total Outstanding Debt: ${fmt(customers.reduce((a,c)=>a+(c.balance||0),0))}\n` +
+              overdueText +
+              `\n\n— Smart Duka —`;
+  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
 }
 
-// Force refresh overdue for a specific customer (recalc from transactions, clear manual override)
+function openReportModal() { openModal('report'); }
+
+// Overdue calculation helpers
+function computeOverdueDays(cust) {
+  if (cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null && cust.manualOverdueDays >= 0) return cust.manualOverdueDays;
+  const creditTxns = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'credit').sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if (creditTxns.length === 0) return 0;
+  const diffDays = Math.floor((new Date() - new Date(creditTxns[0].date)) / (86400000));
+  return diffDays > 0 ? diffDays : 0;
+}
 async function refreshOverdueForCustomer(custId) {
   let cust = customers.find(c => c.id === custId);
   if (!cust) return;
-  // remove manual override, recalc from transactions
   delete cust.manualOverdueDays;
   await updateItem('customers', cust);
   await refreshData();
   if (selectedCustomerId === custId) viewCustomer(custId);
   renderCustomers();
 }
-
-// Open overdue picker modal for manual setting
-function openOverduePicker(custId) {
-  pendingOverdueCid = custId;
-  document.getElementById('overdue-date-input').value = '';
-  document.getElementById('overdue-days-manual').value = '';
-  openModal('overduePicker');
-}
-
-// Apply manual overdue date or days
+function openOverduePicker(custId) { pendingOverdueCid = custId; document.getElementById('overdue-date-input').value = ''; document.getElementById('overdue-days-manual').value = ''; openModal('overduePicker'); }
 async function applyOverdueDate() {
   if (!pendingOverdueCid) return;
   let cust = customers.find(c => c.id === pendingOverdueCid);
@@ -393,16 +428,12 @@ async function applyOverdueDate() {
   let manualDays = parseInt(document.getElementById('overdue-days-manual').value);
   if (dateStr) {
     let selectedDate = new Date(dateStr);
-    let today = new Date();
-    let days = Math.floor((today - selectedDate) / (1000 * 60 * 60 * 24));
+    let days = Math.floor((new Date() - selectedDate) / 86400000);
     if (days < 0) days = 0;
     cust.manualOverdueDays = days;
   } else if (!isNaN(manualDays) && manualDays >= 0) {
     cust.manualOverdueDays = manualDays;
-  } else {
-    alert('Please select a date or enter days overdue');
-    return;
-  }
+  } else { alert('Please select a date or enter days overdue'); return; }
   await updateItem('customers', cust);
   await refreshData();
   if (selectedCustomerId === pendingOverdueCid) viewCustomer(pendingOverdueCid);
@@ -411,246 +442,111 @@ async function applyOverdueDate() {
   pendingOverdueCid = null;
 }
 
-// IndexedDB helpers
-async function getAll(store) {
-  return new Promise((res, rej) => {
-    const r = db.transaction(store, 'readonly').objectStore(store).getAll();
-    r.onsuccess = () => res(r.result);
-    r.onerror = () => rej(r.error);
-  });
-}
-async function addItem(store, item) {
-  return new Promise((res, rej) => {
-    const r = db.transaction(store, 'readwrite').objectStore(store).add(item);
-    r.onsuccess = () => res(r.result);
-    r.onerror = () => rej(r.error);
-  });
-}
-async function updateItem(store, item) {
-  return new Promise((res, rej) => {
-    const r = db.transaction(store, 'readwrite').objectStore(store).put(item);
-    r.onsuccess = () => res();
-    r.onerror = () => rej(r.error);
-  });
-}
-async function deleteItem(store, id) {
-  return new Promise((res, rej) => {
-    const r = db.transaction(store, 'readwrite').objectStore(store).delete(id);
-    r.onsuccess = () => res();
-    r.onerror = () => rej(r.error);
-  });
-}
-async function loadData() {
-  customers = await getAll('customers');
-  customerTransactions = await getAll('customerTransactions');
-  sales = await getAll('sales');
-  products = await getAll('products');
-  expenses = await getAll('expenses');
-}
+// IndexedDB helpers (unchanged)
+async function getAll(store) { return new Promise((res,rej)=>{const r=db.transaction(store,'readonly').objectStore(store).getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
+async function addItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).add(item); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
+async function updateItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).put(item); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
+async function deleteItem(store,id) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).delete(id); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
+async function loadData() { customers = await getAll('customers'); customerTransactions = await getAll('customerTransactions'); sales = await getAll('sales'); products = await getAll('products'); expenses = await getAll('expenses'); }
 async function refreshData() { await loadData(); renderCustomers(); }
 
-const fmt = n => 'KES ' + Number(n || 0).toLocaleString('en-KE', { maximumFractionDigits: 0 });
-const fmtShort = n => { let v = Math.abs(n || 0); return v >= 1000 ? (n < 0 ? '-' : '') + (v / 1000).toFixed(1) + 'K' : String(Math.round(n || 0)); };
-function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+const fmt = n => 'KES ' + Number(n||0).toLocaleString('en-KE',{maximumFractionDigits:0});
+const fmtShort = n => { let v = Math.abs(n||0); return v>=1000?(n<0?'-':'')+(v/1000).toFixed(1)+'K':String(Math.round(n||0)); };
+function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { if (m==='&') return '&amp;'; if (m==='<') return '&lt;'; if (m==='>') return '&gt;'; return m; }); }
 
 function renderCustomers() {
   let list = customers.filter(c => {
-    if (custFilter === 'debt') return (c.balance || 0) > 0;
-    if (custFilter === 'clear') return (c.balance || 0) === 0;
+    if (custFilter === 'debt') return (c.balance||0) > 0;
+    if (custFilter === 'clear') return (c.balance||0) === 0;
     return true;
-  }).filter(c => c.name.toLowerCase().includes(custSearch) || (c.phone || '').includes(custSearch))
-    .sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0));
-  document.getElementById('p-cust').textContent = customers.length + ' Client' + (customers.length !== 1 ? 's' : '');
-  let highDebt = customers.filter(c => (c.balance || 0) > 1000);
+  }).filter(c => c.name.toLowerCase().includes(custSearch) || (c.phone||'').includes(custSearch)).sort((a,b)=>(b.totalSpent||0)-(a.totalSpent||0));
+  document.getElementById('p-cust').textContent = customers.length + ' Client' + (customers.length!==1?'s':'');
+  let highDebt = customers.filter(c=>(c.balance||0)>1000);
   let alertEl = document.getElementById('cust-alert');
-  if (highDebt.length) {
-    alertEl.classList.add('show');
-    document.getElementById('cust-alert-text').innerHTML = `⚠️ High balance: <strong>${highDebt.map(c => c.name).join(', ')}</strong>`;
-  } else alertEl.classList.remove('show');
-  if (!list.length) {
-    document.getElementById('cust-list').innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">${customers.length ? 'No matching clients' : 'No clients yet. Click + Add Client'}</div></div>`;
-    return;
-  }
+  if (highDebt.length) { alertEl.classList.add('show'); document.getElementById('cust-alert-text').innerHTML = `⚠️ High balance: <strong>${highDebt.map(c=>c.name).join(', ')}</strong>`; } else alertEl.classList.remove('show');
+  if (!list.length) { document.getElementById('cust-list').innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">${customers.length?'No matching clients':'No clients yet. Click + Add Client'}</div></div>`; return; }
   document.getElementById('cust-list').innerHTML = list.map(c => {
-    let hasDebt = (c.balance || 0) > 0;
+    let hasDebt = (c.balance||0) > 0;
     let overdue = hasDebt ? computeOverdueDays(c) : 0;
     let overdueBadge = '';
-    if (hasDebt && overdue > 0) {
-      let severe = overdue >= 30;
-      overdueBadge = `<span class="overdue-badge ${severe ? 'severe' : ''}">⚠️ ${overdue} day${overdue !== 1 ? 's' : ''} overdue</span>`;
-    }
-    return `<div class="cust-item ${hasDebt ? 'has-debt' : 'cleared'}" onclick="viewCustomer(${c.id})">
-      <div class="cust-item-row">
-        <div class="cust-info">
-          <div class="cust-name">${escapeHtml(c.name)} ${overdueBadge}</div>
-          <div class="cust-phone">${c.phone || '—'}</div>
-          <div class="cust-edit-row" onclick="event.stopPropagation()">
-            <div class="cust-edit-field"><label>Spent (KES)</label><input type="number" id="spent-${c.id}" value="${c.totalSpent || 0}"></div>
-            <div class="cust-edit-field"><label>Credit (KES)</label><input type="number" id="credit-${c.id}" value="${c.credit || 0}"></div>
-            <div class="cust-edit-field"><label>Paid (KES)</label><input type="number" id="paid-${c.id}" value="${c.debit || 0}"></div>
-            <div class="cust-edit-field"><label>Overdue Days</label><input type="number" id="overdue-${c.id}" value="${c.manualOverdueDays !== undefined ? c.manualOverdueDays : computeOverdueDays(c)}" min="0"></div>
-          </div>
-          <div class="cust-action-btns" onclick="event.stopPropagation()">
-            <button class="cust-update-btn" onclick="updateCustomerFields(${c.id}, document.getElementById('spent-${c.id}').value, document.getElementById('credit-${c.id}').value, document.getElementById('paid-${c.id}').value, document.getElementById('overdue-${c.id}').value)">✓ Update</button>
-            <button class="cust-delete-btn" onclick="deleteCustomerWithTransactions(${c.id})">🗑 Delete</button>
-            <button class="refresh-overdue-btn" onclick="refreshOverdueForCustomer(${c.id})">⟳ Recalc</button>
-            <button class="set-overdue-btn" onclick="openOverduePicker(${c.id})">📅 Set</button>
-          </div>
-          <div class="cust-stats-row"><span class="cst">Balance: ${fmt(c.balance || 0)}</span></div>
-          ${(c.balance || 0) > 1000 ? '<div class="debt-alert">⚠️ High balance</div>' : ''}
+    if (hasDebt && overdue > 0) { let severe = overdue >= 30; overdueBadge = `<span class="overdue-badge ${severe?'severe':''}">⚠️ ${overdue} day${overdue!==1?'s':''} overdue</span>`; }
+    return `<div class="cust-item ${hasDebt?'has-debt':'cleared'}" onclick="viewCustomer(${c.id})">
+      <div class="cust-item-row"><div class="cust-info">
+        <div class="cust-name">${escapeHtml(c.name)} ${overdueBadge}</div>
+        <div class="cust-phone">${c.phone||'—'}</div>
+        <div class="cust-edit-row" onclick="event.stopPropagation()">
+          <div class="cust-edit-field"><label>Spent (KES)</label><input type="number" id="spent-${c.id}" value="${c.totalSpent||0}"></div>
+          <div class="cust-edit-field"><label>Credit (KES)</label><input type="number" id="credit-${c.id}" value="${c.credit||0}"></div>
+          <div class="cust-edit-field"><label>Paid (KES)</label><input type="number" id="paid-${c.id}" value="${c.debit||0}"></div>
+          <div class="cust-edit-field"><label>Overdue Days</label><input type="number" id="overdue-${c.id}" value="${c.manualOverdueDays!==undefined?c.manualOverdueDays:computeOverdueDays(c)}" min="0"></div>
         </div>
-        <div class="cust-bal"><div class="cust-bal-num ${hasDebt ? 'debt' : 'clear'}">${fmtShort(c.balance || 0)}</div><div class="cust-bal-lbl">${hasDebt ? 'owes' : 'cleared'}</div></div>
-      </div>
+        <div class="cust-action-btns" onclick="event.stopPropagation()">
+          <button class="cust-update-btn" onclick="updateCustomerFields(${c.id}, document.getElementById('spent-${c.id}').value, document.getElementById('credit-${c.id}').value, document.getElementById('paid-${c.id}').value, document.getElementById('overdue-${c.id}').value)">✓ Update</button>
+          <button class="cust-delete-btn" onclick="deleteCustomerWithTransactions(${c.id})">🗑 Delete</button>
+          <button class="refresh-overdue-btn" onclick="refreshOverdueForCustomer(${c.id})">⟳ Recalc</button>
+          <button class="set-overdue-btn" onclick="openOverduePicker(${c.id})">📅 Set</button>
+        </div>
+        <div class="cust-stats-row"><span class="cst">Balance: ${fmt(c.balance||0)}</span></div>${(c.balance||0)>1000?'<div class="debt-alert">⚠️ High balance</div>':''}
+      </div><div class="cust-bal"><div class="cust-bal-num ${hasDebt?'debt':'clear'}">${fmtShort(c.balance||0)}</div><div class="cust-bal-lbl">${hasDebt?'owes':'cleared'}</div></div></div>
     </div>`;
   }).join('');
 }
 
 async function updateCustomerFields(cid, spentVal, creditVal, paidVal, overdueDaysVal) {
-  let cust = customers.find(c => c.id === cid);
-  if (!cust) return;
-  cust.totalSpent = parseFloat(spentVal) || 0;
-  cust.credit = parseFloat(creditVal) || 0;
-  cust.debit = parseFloat(paidVal) || 0;
-  cust.balance = cust.credit - cust.debit;
-  cust.lastActivity = new Date().toISOString();
-  let od = parseInt(overdueDaysVal);
-  if (!isNaN(od) && od >= 0) {
-    cust.manualOverdueDays = od;
-  } else {
-    delete cust.manualOverdueDays;
-  }
-  await updateItem('customers', cust);
-  await refreshData();
+  let cust = customers.find(c=>c.id===cid); if (!cust) return;
+  cust.totalSpent = parseFloat(spentVal)||0; cust.credit = parseFloat(creditVal)||0; cust.debit = parseFloat(paidVal)||0; cust.balance = cust.credit - cust.debit; cust.lastActivity = new Date().toISOString();
+  let od = parseInt(overdueDaysVal); if (!isNaN(od) && od>=0) cust.manualOverdueDays = od; else delete cust.manualOverdueDays;
+  await updateItem('customers', cust); await refreshData();
 }
-
 async function deleteCustomerWithTransactions(cid) {
   if (!confirm('Delete this client and ALL transaction history? Cannot be undone.')) return;
   await deleteItem('customers', cid);
-  let txns = customerTransactions.filter(t => t.customerId === cid);
+  let txns = customerTransactions.filter(t=>t.customerId===cid);
   for (let t of txns) await deleteItem('customerTransactions', t.id);
-  if (selectedCustomerId === cid) selectedCustomerId = null;
-  await refreshData();
-  cm('custDetail');
+  if (selectedCustomerId===cid) selectedCustomerId=null;
+  await refreshData(); cm('custDetail');
 }
-
 function viewCustomer(id) {
-  selectedCustomerId = id;
-  let cust = customers.find(c => c.id === id);
-  if (!cust) return;
-  document.getElementById('cd-name').textContent = cust.name;
-  document.getElementById('cd-phone').textContent = cust.phone || 'No phone';
-  let balEl = document.getElementById('cd-balance');
-  balEl.textContent = fmt(cust.balance || 0);
-  balEl.className = 'cd-stat-val ' + ((cust.balance || 0) > 0 ? 'debt' : 'clear');
-  document.getElementById('cd-spent').textContent = fmt(cust.totalSpent || 0);
-  document.getElementById('cd-credit').textContent = fmt(cust.credit || 0);
-  document.getElementById('cd-debit').textContent = fmt(cust.debit || 0);
-  let txns = customerTransactions.filter(t => t.customerId === id).sort((a, b) => new Date(b.date) - new Date(a.date));
-  document.getElementById('cd-txns').innerHTML = txns.length ? txns.map(t => `<div class="cd-txn">
-    <div><div class="cd-txn-type" style="${t.type === 'credit' ? 'color:#FB8097' : (t.type === 'sale' ? 'color:var(--gold2)' : 'color:var(--em2)')}">${t.type === 'credit' ? '↑ Credit Added' : (t.type === 'sale' ? '💰 Sale' : '↓ Payment Received')}</div>
-    <div class="cd-txn-note">${escapeHtml(t.note || '—')}</div><div class="cd-txn-date">${new Date(t.date).toLocaleDateString()}</div></div>
-    <div class="cd-txn-amt" style="${t.type === 'credit' ? 'color:#FB8097' : (t.type === 'sale' ? 'color:var(--gold2)' : 'color:var(--em2)')}">${t.type === 'credit' ? '+' : (t.type === 'sale' ? '✓' : '-')}${fmt(t.amount)}</div>
-  </div>`).join('') : '<div class="empty-state" style="padding:24px;">No transactions yet</div>';
+  selectedCustomerId=id; let cust=customers.find(c=>c.id===id); if(!cust) return;
+  document.getElementById('cd-name').textContent=cust.name; document.getElementById('cd-phone').textContent=cust.phone||'No phone';
+  let balEl=document.getElementById('cd-balance'); balEl.textContent=fmt(cust.balance||0); balEl.className='cd-stat-val '+((cust.balance||0)>0?'debt':'clear');
+  document.getElementById('cd-spent').textContent=fmt(cust.totalSpent||0); document.getElementById('cd-credit').textContent=fmt(cust.credit||0); document.getElementById('cd-debit').textContent=fmt(cust.debit||0);
+  let txns=customerTransactions.filter(t=>t.customerId===id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('cd-txns').innerHTML=txns.length?txns.map(t=>`<div class="cd-txn"><div><div class="cd-txn-type" style="${t.type==='credit'?'color:#FB8097':(t.type==='sale'?'color:var(--gold2)':'color:var(--em2)')}">${t.type==='credit'?'↑ Credit Added':(t.type==='sale'?'💰 Sale':'↓ Payment Received')}</div><div class="cd-txn-note">${escapeHtml(t.note||'—')}</div><div class="cd-txn-date">${new Date(t.date).toLocaleDateString()}</div></div><div class="cd-txn-amt" style="${t.type==='credit'?'color:#FB8097':(t.type==='sale'?'color:var(--gold2)':'color:var(--em2)')}">${t.type==='credit'?'+':(t.type==='sale'?'✓':'-')}${fmt(t.amount)}</div></div>`).join(''):'<div class="empty-state" style="padding:24px;">No transactions yet</div>';
   openModal('custDetail');
 }
-
-function openRecordPayment() {
-  let cust = customers.find(c => c.id === selectedCustomerId);
-  if (!cust) return;
-  document.getElementById('rp-balance-display').textContent = fmt(cust.balance || 0);
-  document.getElementById('rp-amount').value = '';
-  document.getElementById('rp-note').value = '';
-  cm('custDetail');
-  openModal('recordPayment');
-}
-function openSellCredit() {
-  let cust = customers.find(c => c.id === selectedCustomerId);
-  if (!cust) return;
-  document.getElementById('sc-cust-name').textContent = cust.name;
-  document.getElementById('sc-note').value = '';
-  document.getElementById('sc-amount').value = '';
-  cm('custDetail');
-  openModal('sellCredit');
-}
-async function recordPayment() {
-  let amount = parseFloat(document.getElementById('rp-amount').value);
-  let note = document.getElementById('rp-note').value.trim() || 'Payment';
-  if (!amount || amount <= 0) { alert('Enter valid amount'); return; }
-  let cust = customers.find(c => c.id === selectedCustomerId);
-  if (!cust) return;
-  let actualAmount = Math.min(amount, cust.balance || 0);
-  if (actualAmount <= 0) { alert('No debt to clear'); return; }
-  await addItem('customerTransactions', { customerId: selectedCustomerId, type: 'debit', amount: actualAmount, note, date: new Date().toISOString() });
-  cust.debit = (cust.debit || 0) + actualAmount;
-  cust.balance = (cust.credit || 0) - (cust.debit || 0);
-  cust.lastActivity = new Date().toISOString();
-  await updateItem('customers', cust);
-  await refreshData();
-  cm('recordPayment');
-}
-async function sellOnCredit() {
-  let note = document.getElementById('sc-note').value.trim();
-  let amount = parseFloat(document.getElementById('sc-amount').value);
-  if (!note || !amount || amount <= 0) { alert('Fill description and amount'); return; }
-  let cust = customers.find(c => c.id === selectedCustomerId);
-  if (!cust) return;
-  await addItem('sales', { product: note, amount, payment_method: 'credit', date: new Date().toISOString(), customerId: selectedCustomerId, customerName: cust.name });
-  await addItem('customerTransactions', { customerId: selectedCustomerId, type: 'credit', amount, note, date: new Date().toISOString() });
-  cust.credit = (cust.credit || 0) + amount;
-  cust.balance = (cust.credit || 0) - (cust.debit || 0);
-  cust.totalSpent = (cust.totalSpent || 0) + amount;
-  cust.lastActivity = new Date().toISOString();
-  await updateItem('customers', cust);
-  await refreshData();
-  cm('sellCredit');
-}
-async function deleteCurrentCustomer() {
-  if (!selectedCustomerId) return;
-  if (confirm('Delete this client permanently?')) {
-    await deleteItem('customers', selectedCustomerId);
-    let txns = customerTransactions.filter(t => t.customerId === selectedCustomerId);
-    for (let t of txns) await deleteItem('customerTransactions', t.id);
-    selectedCustomerId = null;
-    cm('custDetail');
-    await refreshData();
-  }
-}
-function setCustFilter(f) { custFilter = f; document.querySelectorAll('.cf-btn').forEach(btn => btn.classList.remove('on')); document.getElementById(`cf-${f}`).classList.add('on'); renderCustomers(); }
-function filterCustomers() { custSearch = document.getElementById('cust-search-input').value.toLowerCase().trim(); renderCustomers(); }
-async function addCustomer() {
-  let n = document.getElementById('cn-name').value.trim();
-  if (!n) return alert('Name required');
-  await addItem('customers', { name: n, phone: document.getElementById('cn-phone').value.trim(), totalSpent: 0, credit: 0, debit: 0, balance: 0, lastActivity: new Date().toISOString() });
-  await refreshData();
-  cm('addCustomer');
-  document.getElementById('cn-name').value = '';
-  document.getElementById('cn-phone').value = '';
-}
+function openRecordPayment() { let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; document.getElementById('rp-balance-display').textContent=fmt(cust.balance||0); document.getElementById('rp-amount').value=''; document.getElementById('rp-note').value=''; cm('custDetail'); openModal('recordPayment'); }
+function openSellCredit() { let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; document.getElementById('sc-cust-name').textContent=cust.name; document.getElementById('sc-note').value=''; document.getElementById('sc-amount').value=''; cm('custDetail'); openModal('sellCredit'); }
+async function recordPayment() { let amount=parseFloat(document.getElementById('rp-amount').value); let note=document.getElementById('rp-note').value.trim()||'Payment'; if(!amount||amount<=0){alert('Enter valid amount'); return;} let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; let actualAmount=Math.min(amount,cust.balance||0); if(actualAmount<=0){alert('No debt to clear'); return;} await addItem('customerTransactions',{customerId:selectedCustomerId,type:'debit',amount:actualAmount,note,date:new Date().toISOString()}); cust.debit=(cust.debit||0)+actualAmount; cust.balance=(cust.credit||0)-(cust.debit||0); cust.lastActivity=new Date().toISOString(); await updateItem('customers',cust); await refreshData(); cm('recordPayment'); }
+async function sellOnCredit() { let note=document.getElementById('sc-note').value.trim(); let amount=parseFloat(document.getElementById('sc-amount').value); if(!note||!amount||amount<=0){alert('Fill description and amount'); return;} let cust=customers.find(c=>c.id===selectedCustomerId); if(!cust) return; await addItem('sales',{product:note,amount,payment_method:'credit',date:new Date().toISOString(),customerId:selectedCustomerId,customerName:cust.name}); await addItem('customerTransactions',{customerId:selectedCustomerId,type:'credit',amount,note,date:new Date().toISOString()}); cust.credit=(cust.credit||0)+amount; cust.balance=(cust.credit||0)-(cust.debit||0); cust.totalSpent=(cust.totalSpent||0)+amount; cust.lastActivity=new Date().toISOString(); await updateItem('customers',cust); await refreshData(); cm('sellCredit'); }
+async function deleteCurrentCustomer() { if(!selectedCustomerId) return; if(confirm('Delete this client permanently?')){ await deleteItem('customers',selectedCustomerId); let txns=customerTransactions.filter(t=>t.customerId===selectedCustomerId); for(let t of txns) await deleteItem('customerTransactions',t.id); selectedCustomerId=null; cm('custDetail'); await refreshData(); } }
+function setCustFilter(f) { custFilter=f; document.querySelectorAll('.cf-btn').forEach(btn=>btn.classList.remove('on')); document.getElementById(`cf-${f}`).classList.add('on'); renderCustomers(); }
+function filterCustomers() { custSearch=document.getElementById('cust-search-input').value.toLowerCase().trim(); renderCustomers(); }
+async function addCustomer() { let n=document.getElementById('cn-name').value.trim(); if(!n) return alert('Name required'); await addItem('customers',{name:n,phone:document.getElementById('cn-phone').value.trim(),totalSpent:0,credit:0,debit:0,balance:0,lastActivity:new Date().toISOString()}); await refreshData(); cm('addCustomer'); document.getElementById('cn-name').value=''; document.getElementById('cn-phone').value=''; }
 function openModal(t) { document.getElementById(`mo-${t}`).classList.add('on'); }
 function cm(t) { document.getElementById(`mo-${t}`).classList.remove('on'); }
 
-// Auth logic (preserved)
-const AUTH_SALT = 'smart_duka_salt_v2', SESSION_KEY = 'dm_session', USERS_KEY = 'dm_users';
-async function hashPassword(pw) { const enc = new TextEncoder(), data = enc.encode(pw + AUTH_SALT), buf = await crypto.subtle.digest('SHA-256', data); return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join(''); }
-function generateUserId() { return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
-function getUsers() { return JSON.parse(localStorage.getItem(USERS_KEY) || '[]'); }
-function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-function findUserByEmail(email) { return getUsers().find(u => u.email.toLowerCase() === email.toLowerCase()); }
-function createSession(user) { localStorage.setItem(SESSION_KEY, JSON.stringify({ userId: user.id, email: user.email, shopName: user.shopName, expires: Date.now() + 8 * 3600000 })); currentUser = { id: user.id, email: user.email, shopName: user.shopName }; updateShopNameDisplay(); }
-function getSession() { try { let s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); if (!s || Date.now() > s.expires) { localStorage.removeItem(SESSION_KEY); return null; } currentUser = { id: s.userId, email: s.email, shopName: s.shopName }; updateShopNameDisplay(); return s; } catch { return null; } }
-function clearSession() { localStorage.removeItem(SESSION_KEY); currentUser = null; }
-function updateShopNameDisplay() { let el = document.getElementById('shop-name-display'); if (el && currentUser) el.textContent = currentUser.shopName || 'Smart Duka'; }
-function getUserDBName(uid) { return `duka_master_${uid}`; }
-async function openUserDB(uid) { return new Promise((res, rej) => { let r = indexedDB.open(getUserDBName(uid), 3); r.onerror = () => rej(r.error); r.onsuccess = () => { db = r.result; res(db); }; r.onupgradeneeded = (ev) => { let db = ev.target.result; if (!db.objectStoreNames.contains('products')) db.createObjectStore('products', { keyPath: 'id', autoIncrement: true }); if (!db.objectStoreNames.contains('sales')) db.createObjectStore('sales', { keyPath: 'id', autoIncrement: true }); if (!db.objectStoreNames.contains('expenses')) db.createObjectStore('expenses', { keyPath: 'id', autoIncrement: true }); if (!db.objectStoreNames.contains('customers')) db.createObjectStore('customers', { keyPath: 'id', autoIncrement: true }); if (!db.objectStoreNames.contains('customerTransactions')) { let cts = db.createObjectStore('customerTransactions', { keyPath: 'id', autoIncrement: true }); cts.createIndex('customerId', 'customerId'); } }; }); }
-async function initializeSampleData() { let existing = await getAll('customers'); if (existing.length === 0) { await addItem('customers', { name: 'Sarah Wanjiku', phone: '0712 345 678', totalSpent: 2500, credit: 1500, debit: 500, balance: 1000, lastActivity: new Date().toISOString(), manualOverdueDays: 15 }); await addItem('customers', { name: 'Peter Kamau', phone: '0723 456 789', totalSpent: 4200, credit: 4200, debit: 4200, balance: 0, lastActivity: new Date().toISOString() }); await addItem('customerTransactions', { customerId: 1, type: 'credit', amount: 1500, note: 'Initial credit', date: new Date(Date.now() - 15*86400000).toISOString() }); await addItem('customerTransactions', { customerId: 1, type: 'debit', amount: 500, note: 'Partial payment', date: new Date().toISOString() });
-  } }
-function showApp() { document.getElementById('auth-overlay').classList.add('auth-hide'); setTimeout(() => { document.getElementById('auth-overlay').style.display = 'none'; document.getElementById('app').style.display = 'flex'; }, 420); renderCustomers(); }
-let authMode = 'login';
-function authSetTab(mode) { authMode = mode; document.getElementById('tab-login').classList.toggle('active', mode === 'login'); document.getElementById('tab-signup').classList.toggle('active', mode === 'signup'); document.getElementById('login-fields').style.display = mode === 'login' ? 'block' : 'none'; document.getElementById('signup-fields').style.display = mode === 'signup' ? 'block' : 'none'; document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Sign In' : 'Create Account'; document.getElementById('auth-switch-msg').innerHTML = mode === 'login' ? `Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span>` : `Already have an account? <span class="auth-switch-link" onclick="authSetTab('login')">Sign in</span>`; document.getElementById('auth-error').classList.remove('show'); }
-function showAuthError(msg) { let err = document.getElementById('auth-error'); err.textContent = msg; err.classList.add('show'); setTimeout(() => err.classList.remove('show'), 4000); }
-async function authSubmit() { let email = (authMode === 'login' ? document.getElementById('login-email') : document.getElementById('signup-email')).value.trim(); let pwd = (authMode === 'login' ? document.getElementById('login-password') : document.getElementById('signup-password')).value; if (!email || !pwd) return showAuthError('Email and password required'); if (authMode === 'signup') { let shop = document.getElementById('signup-shopname').value.trim(); if (!shop) return showAuthError('Shop name required'); if (pwd.length < 6) return showAuthError('Password ≥6 characters'); let users = getUsers(); if (findUserByEmail(email)) return showAuthError('Email already registered'); let hash = await hashPassword(pwd); let newUser = { id: generateUserId(), email: email.toLowerCase(), passwordHash: hash, shopName: shop }; users.push(newUser); saveUsers(users); createSession(newUser); await openUserDB(newUser.id); await initializeSampleData(); await loadData(); showApp(); } else { let user = findUserByEmail(email); if (!user) return showAuthError('Invalid email or password'); let hash = await hashPassword(pwd); if (hash !== user.passwordHash) return showAuthError('Invalid email or password'); createSession(user); await openUserDB(user.id); await loadData(); showApp(); } }
-async function authLogout() { if (confirm('Sign out of Smart Duka?')) { clearSession(); db = null; document.getElementById('app').style.display = 'none'; document.getElementById('auth-overlay').style.display = 'flex'; document.getElementById('auth-overlay').classList.remove('auth-hide'); authSetTab('login'); document.getElementById('login-email').value = ''; document.getElementById('login-password').value = ''; document.getElementById('signup-shopname').value = ''; document.getElementById('signup-email').value = ''; document.getElementById('signup-password').value = ''; document.querySelectorAll('.moverlay.on').forEach(m => m.classList.remove('on')); } }
-(async function init() { let sess = getSession(); if (sess) { await openUserDB(sess.userId); await loadData(); showApp(); } else { document.getElementById('auth-overlay').style.display = 'flex'; authSetTab('login'); } document.querySelectorAll('.moverlay').forEach(el => el.addEventListener('click', e => { if (e.target === el) el.classList.remove('on'); })); })();
+// Auth logic (unchanged)
+const AUTH_SALT='smart_duka_salt_v2',SESSION_KEY='dm_session',USERS_KEY='dm_users';
+async function hashPassword(pw){const enc=new TextEncoder(),data=enc.encode(pw+AUTH_SALT),buf=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+function generateUserId(){return 'user_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);}
+function getUsers(){return JSON.parse(localStorage.getItem(USERS_KEY)||'[]');}
+function saveUsers(users){localStorage.setItem(USERS_KEY,JSON.stringify(users));}
+function findUserByEmail(email){return getUsers().find(u=>u.email.toLowerCase()===email.toLowerCase());}
+function createSession(user){localStorage.setItem(SESSION_KEY,JSON.stringify({userId:user.id,email:user.email,shopName:user.shopName,expires:Date.now()+8*3600000}));currentUser={id:user.id,email:user.email,shopName:user.shopName};updateShopNameDisplay();}
+function getSession(){try{let s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');if(!s||Date.now()>s.expires){localStorage.removeItem(SESSION_KEY);return null;}currentUser={id:s.userId,email:s.email,shopName:s.shopName};updateShopNameDisplay();return s;}catch{return null;}}
+function clearSession(){localStorage.removeItem(SESSION_KEY);currentUser=null;}
+function updateShopNameDisplay(){let el=document.getElementById('shop-name-display');if(el&&currentUser)el.textContent=currentUser.shopName||'Smart Duka';}
+function getUserDBName(uid){return `duka_master_${uid}`;}
+async function openUserDB(uid){return new Promise((res,rej)=>{let r=indexedDB.open(getUserDBName(uid),3);r.onerror=()=>rej(r.error);r.onsuccess=()=>{db=r.result;res(db);};r.onupgradeneeded=(ev)=>{let db=ev.target.result;if(!db.objectStoreNames.contains('products'))db.createObjectStore('products',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('sales'))db.createObjectStore('sales',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('expenses'))db.createObjectStore('expenses',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('customers'))db.createObjectStore('customers',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('customerTransactions')){let cts=db.createObjectStore('customerTransactions',{keyPath:'id',autoIncrement:true});cts.createIndex('customerId','customerId');}};});}
+async function initializeSampleData(){let existing=await getAll('customers');if(existing.length===0){await addItem('customers',{name:'Sarah Wanjiku',phone:'0712 345 678',totalSpent:2500,credit:1500,debit:500,balance:1000,lastActivity:new Date().toISOString(),manualOverdueDays:15});await addItem('customers',{name:'Peter Kamau',phone:'0723 456 789',totalSpent:4200,credit:4200,debit:4200,balance:0,lastActivity:new Date().toISOString()});await addItem('customerTransactions',{customerId:1,type:'credit',amount:1500,note:'Initial credit',date:new Date(Date.now()-15*86400000).toISOString()});await addItem('customerTransactions',{customerId:1,type:'debit',amount:500,note:'Partial payment',date:new Date().toISOString()});}}
+function showApp(){document.getElementById('auth-overlay').classList.add('auth-hide');setTimeout(()=>{document.getElementById('auth-overlay').style.display='none';document.getElementById('app').style.display='flex';},420);renderCustomers();}
+let authMode='login';
+function authSetTab(mode){authMode=mode;document.getElementById('tab-login').classList.toggle('active',mode==='login');document.getElementById('tab-signup').classList.toggle('active',mode==='signup');document.getElementById('login-fields').style.display=mode==='login'?'block':'none';document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';document.getElementById('auth-submit-btn').textContent=mode==='login'?'Sign In':'Create Account';document.getElementById('auth-switch-msg').innerHTML=mode==='login'?`Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span>`:`Already have an account? <span class="auth-switch-link" onclick="authSetTab('login')">Sign in</span>`;document.getElementById('auth-error').classList.remove('show');}
+function showAuthError(msg){let err=document.getElementById('auth-error');err.textContent=msg;err.classList.add('show');setTimeout(()=>err.classList.remove('show'),4000);}
+async function authSubmit(){let email=(authMode==='login'?document.getElementById('login-email'):document.getElementById('signup-email')).value.trim();let pwd=(authMode==='login'?document.getElementById('login-password'):document.getElementById('signup-password')).value;if(!email||!pwd)return showAuthError('Email and password required');if(authMode==='signup'){let shop=document.getElementById('signup-shopname').value.trim();if(!shop)return showAuthError('Shop name required');if(pwd.length<6)return showAuthError('Password ≥6 characters');let users=getUsers();if(findUserByEmail(email))return showAuthError('Email already registered');let hash=await hashPassword(pwd);let newUser={id:generateUserId(),email:email.toLowerCase(),passwordHash:hash,shopName:shop};users.push(newUser);saveUsers(users);createSession(newUser);await openUserDB(newUser.id);await initializeSampleData();await loadData();showApp();}else{let user=findUserByEmail(email);if(!user)return showAuthError('Invalid email or password');let hash=await hashPassword(pwd);if(hash!==user.passwordHash)return showAuthError('Invalid email or password');createSession(user);await openUserDB(user.id);await loadData();showApp();}}
+async function authLogout(){if(confirm('Sign out of Smart Duka?')){clearSession();db=null;document.getElementById('app').style.display='none';document.getElementById('auth-overlay').style.display='flex';document.getElementById('auth-overlay').classList.remove('auth-hide');authSetTab('login');document.getElementById('login-email').value='';document.getElementById('login-password').value='';document.getElementById('signup-shopname').value='';document.getElementById('signup-email').value='';document.getElementById('signup-password').value='';document.querySelectorAll('.moverlay.on').forEach(m=>m.classList.remove('on'));}}
+(async function init(){let sess=getSession();if(sess){await openUserDB(sess.userId);await loadData();showApp();}else{document.getElementById('auth-overlay').style.display='flex';authSetTab('login');}document.querySelectorAll('.moverlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('on');}));})();
 </script>
 </body>
 </html>
