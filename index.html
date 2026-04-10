@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Smart Duka · Client Hub + Reports</title>
+<title>Smart Duka · Client Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -350,55 +350,35 @@ body::after{
 <div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05);border-radius:var(--r2);padding:14px;margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div><div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div><div class="fld"><label>Amount (KES)</label><input type="number" id="sc-amount"></div><button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// Full client management + overdue + WhatsApp reports (only selected fields)
+// Full client management + overdue + WhatsApp reports (financial metrics removed)
 let customers = [], customerTransactions = [], sales = [], products = [], expenses = [];
 let custFilter = 'all', custSearch = '', selectedCustomerId = null;
 let pendingOverdueCid = null;
 let db = null, currentUser = null;
 
-// Report helper: generate message and open WhatsApp (only Total Sales, M-Pesa, Cash, Credit, Expenses, Net Profit)
+// Report helper: generates only shop name and period (no financial data)
 async function shareReport(period) {
   const shop = currentUser?.shopName || 'Smart Duka';
   const now = new Date();
-  let startDate, endDate = new Date();
   let periodLabel = '';
   if (period === 'daily') {
-    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     periodLabel = 'Daily Report - ' + now.toLocaleDateString();
   } else if (period === 'weekly') {
-    startDate = new Date(now);
-    startDate.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1)); // Monday
-    startDate.setHours(0,0,0,0);
+    let startDate = new Date(now);
+    startDate.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
     periodLabel = `Weekly Report (${startDate.toLocaleDateString()} - ${now.toLocaleDateString()})`;
   } else {
-    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
     periodLabel = `Monthly Report - ${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
   }
-  const filteredSales = sales.filter(s => new Date(s.date) >= startDate && new Date(s.date) <= endDate);
-  const totalSales = filteredSales.reduce((a,b)=>a+b.amount,0);
-  const mpesa = filteredSales.filter(s=>s.payment_method==='mpesa').reduce((a,b)=>a+b.amount,0);
-  const cash = filteredSales.filter(s=>s.payment_method==='cash').reduce((a,b)=>a+b.amount,0);
-  const credit = filteredSales.filter(s=>s.payment_method==='credit').reduce((a,b)=>a+b.amount,0);
-  const expensesFiltered = expenses.filter(e => new Date(e.date) >= startDate && new Date(e.date) <= endDate);
-  const totalExp = expensesFiltered.reduce((a,b)=>a+b.amount,0);
-  const profit = Math.round(totalSales * 0.28) - totalExp;
-
-  // Build message with ONLY requested fields
-  const msg = `*${shop} - ${periodLabel}*\n` +
-              `💰 Total Sales: ${fmt(totalSales)}\n` +
-              `📱 M-Pesa: ${fmt(mpesa)}\n` +
-              `💵 Cash: ${fmt(cash)}\n` +
-              `⚠️ Credit: ${fmt(credit)}\n` +
-              `💸 Expenses: ${fmt(totalExp)}\n` +
-              `📈 Net Profit: ${profit>=0?'+':'-'}${fmt(Math.abs(profit))}\n\n` +
-              `— Smart Duka —`;
+  // No financial metrics - just a simple message
+  const msg = `*${shop}*\n📋 ${periodLabel}\n\nReport requested.`;
   const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
 
 function openReportModal() { openModal('report'); }
 
-// Overdue calculation helpers (unchanged)
+// Overdue calculation helpers
 function computeOverdueDays(cust) {
   if (cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null && cust.manualOverdueDays >= 0) return cust.manualOverdueDays;
   const creditTxns = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'credit').sort((a,b)=>new Date(b.date)-new Date(a.date));
