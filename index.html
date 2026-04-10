@@ -350,13 +350,13 @@ body::after{
 <div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05);border-radius:var(--r2);padding:14px;margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div><div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div><div class="fld"><label>Amount (KES)</label><input type="number" id="sc-amount"></div><button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// Full client management + overdue + WhatsApp reports
+// Full client management + overdue + WhatsApp reports (only selected fields)
 let customers = [], customerTransactions = [], sales = [], products = [], expenses = [];
 let custFilter = 'all', custSearch = '', selectedCustomerId = null;
 let pendingOverdueCid = null;
 let db = null, currentUser = null;
 
-// Report helper: generate message and open WhatsApp
+// Report helper: generate message and open WhatsApp (only Total Sales, M-Pesa, Cash, Credit, Expenses, Net Profit)
 async function shareReport(period) {
   const shop = currentUser?.shopName || 'Smart Duka';
   const now = new Date();
@@ -382,27 +382,23 @@ async function shareReport(period) {
   const expensesFiltered = expenses.filter(e => new Date(e.date) >= startDate && new Date(e.date) <= endDate);
   const totalExp = expensesFiltered.reduce((a,b)=>a+b.amount,0);
   const profit = Math.round(totalSales * 0.28) - totalExp;
-  const overdueClients = customers.filter(c => (c.balance||0) > 0 && computeOverdueDays(c) > 0).slice(0,5);
-  let overdueText = overdueClients.length ? '\n⚠️ Overdue clients:\n' + overdueClients.map(c => `• ${c.name}: ${fmtShort(c.balance)} (${computeOverdueDays(c)} days)`).join('\n') : '\n✅ No overdue clients';
+
+  // Build message with ONLY requested fields
   const msg = `*${shop} - ${periodLabel}*\n` +
-              `📅 Date: ${new Date().toLocaleDateString()}\n` +
               `💰 Total Sales: ${fmt(totalSales)}\n` +
               `📱 M-Pesa: ${fmt(mpesa)}\n` +
               `💵 Cash: ${fmt(cash)}\n` +
               `⚠️ Credit: ${fmt(credit)}\n` +
               `💸 Expenses: ${fmt(totalExp)}\n` +
-              `📈 Net Profit: ${profit>=0?'+':'-'}${fmt(Math.abs(profit))}\n` +
-              `👥 Active Clients: ${customers.length}\n` +
-              `💳 Total Outstanding Debt: ${fmt(customers.reduce((a,c)=>a+(c.balance||0),0))}\n` +
-              overdueText +
-              `\n\n— Smart Duka —`;
+              `📈 Net Profit: ${profit>=0?'+':'-'}${fmt(Math.abs(profit))}\n\n` +
+              `— Smart Duka —`;
   const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
 
 function openReportModal() { openModal('report'); }
 
-// Overdue calculation helpers
+// Overdue calculation helpers (unchanged)
 function computeOverdueDays(cust) {
   if (cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null && cust.manualOverdueDays >= 0) return cust.manualOverdueDays;
   const creditTxns = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'credit').sort((a,b)=>new Date(b.date)-new Date(a.date));
