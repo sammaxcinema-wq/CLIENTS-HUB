@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* --- DESIGN SYSTEM (preserved) --- */
 :root {
   --bg:      #0B0B0B;
   --s1:      #0C1310;
@@ -28,31 +27,19 @@
   --muted2:  #8CA396;
   --serif:   'Cormorant Garamond', Georgia, serif;
   --sans:    'Outfit', system-ui, sans-serif;
-  --r:       20px;
-  --r2:      14px;
-  --r3:      10px;
-  --glow-gold: 0 0 20px rgba(200,136,58,0.2);
+  --r:       20px; --r2: 14px; --r3: 10px;
+  --glow-gold:  0 0 20px rgba(200,136,58,0.2);
   --glow-green: 0 0 12px rgba(10,145,103,0.3);
-  --glass:  rgba(12,19,16,0.75);
-  --glass-border: rgba(255,255,255,0.05);
+  --glass: rgba(12,19,16,0.75);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:rgba(3,6,4,0.78);
-}
-body{
-  font-family:var(--sans);background:#050807;
-  color:var(--text);
-  max-width:100%;margin:0 auto;min-height:100vh;overflow-x:hidden;
-}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:rgba(3,6,4,0.78);}
+body{font-family:var(--sans);background:#050807;color:var(--text);max-width:100%;margin:0 auto;min-height:100vh;overflow-x:hidden;}
 #app{max-width:430px;margin:0 auto;}
 ::-webkit-scrollbar{width:0}
-body::after{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:0.025;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");}
 .orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;}
 .orb1{width:380px;height:380px;background:radial-gradient(circle,rgba(200,136,58,0.10) 0%,transparent 70%);top:-120px;right:-100px;filter:blur(40px);}
 .orb2{width:280px;height:280px;background:radial-gradient(circle,rgba(10,145,103,0.08) 0%,transparent 70%);bottom:80px;left:-80px;filter:blur(40px);}
@@ -63,432 +50,92 @@ body::after{
 .brand-eye{font-size:9px;font-weight:600;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
 .brand-name{font-family:var(--serif);font-size:28px;line-height:1;font-weight:400;color:var(--text);letter-spacing:-0.3px;}
 .brand-name em{color:var(--gold);font-style:italic;font-weight:300;}
-.header-buttons{display:flex;gap:8px;}
+.header-buttons{display:flex;gap:8px;align-items:center;}
 .report-btn{display:flex;align-items:center;gap:6px;background:rgba(200,136,58,0.12);border:1px solid rgba(200,136,58,0.3);color:var(--gold2);border-radius:100px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;}
 .report-btn:active{transform:scale(0.96);}
-.logout-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:50%;cursor:pointer;color:var(--muted2);font-size:15px;transition:all .18s;flex-shrink:0;}
+.logout-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:50%;cursor:pointer;color:var(--muted2);font-size:15px;flex-shrink:0;}
 .logout-btn:active{transform:scale(.88);background:rgba(229,69,98,0.10);border-color:rgba(229,69,98,0.25);color:#FB8097;}
-#content{flex:1;padding:4px 16px 32px;}
+#content{flex:1;padding:4px 16px 100px;}
 .pane{display:none;flex-direction:column;gap:13px;padding-top:6px;}
 .pane.on{display:flex;animation:su .42s cubic-bezier(.22,1,.36,1);}
 @keyframes su{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
-/* --- AUTHENTICATION STYLES with Logo --- */
-.auth-screen {
-  max-width: 340px;
-  width: 90%;
-  background: rgba(12,19,16,0.92);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 32px;
-  padding: 32px 24px 40px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,136,58,0.15);
-  text-align: center;
+/* MODE BANNER */
+#mode-banner{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 14px;border-radius:var(--r2);
+  font-size:11px;font-weight:600;margin-bottom:4px;
+  transition:all .3s;
 }
-.auth-logo {
-  margin-bottom: 20px;
-}
-.auth-logo-main {
-  font-family: var(--serif);
-  font-size: 42px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #E9B96E, #C8883A);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  line-height: 1;
-}
-.auth-logo-sub {
-  font-size: 8px;
-  letter-spacing: 3px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-top: 6px;
-}
-.auth-brand-eye {
-  font-size: 9px;
-  letter-spacing: 4px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.auth-brand-name {
-  font-family: var(--serif);
-  font-size: 36px;
-  font-weight: 400;
-  color: var(--text);
-  margin-bottom: 28px;
-}
-.auth-brand-name em {
-  color: var(--gold);
-  font-style: italic;
-}
-.auth-tabs {
-  display: flex;
-  gap: 8px;
-  background: rgba(0,0,0,0.3);
-  border-radius: 60px;
-  padding: 4px;
-  margin-bottom: 28px;
-}
-.auth-tab {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 10px 0;
-  font-family: var(--sans);
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--muted2);
-  border-radius: 60px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.auth-tab.active {
-  background: rgba(200,136,58,0.15);
-  color: var(--gold2);
-  box-shadow: inset 0 0 0 1px rgba(200,136,58,0.3);
-}
-.auth-input-group {
-  margin-bottom: 18px;
-  text-align: left;
-}
-.auth-input-group label {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.auth-input-group input {
-  width: 100%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px;
-  padding: 14px 16px;
-  color: var(--text);
-  font-size: 15px;
-  font-family: var(--sans);
-  outline: none;
-  transition: border 0.2s;
-}
-.auth-input-group input:focus {
-  border-color: var(--gold);
-}
-.auth-error {
-  background: rgba(229,69,98,0.12);
-  border: 1px solid rgba(229,69,98,0.3);
-  border-radius: 12px;
-  padding: 10px;
-  font-size: 12px;
-  color: #FB8097;
-  margin: 16px 0 12px;
-  display: none;
-}
-.auth-error.show {
-  display: block;
-}
-.auth-submit-btn {
-  width: 100%;
-  background: linear-gradient(135deg, var(--gold), #A86E28);
-  border: none;
-  border-radius: 40px;
-  padding: 14px;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 16px;
-  color: #0A0600;
-  cursor: pointer;
-  margin-top: 8px;
-  box-shadow: 0 4px 14px rgba(200,136,58,0.3);
-  transition: transform 0.15s;
-}
-.auth-submit-btn:active {
-  transform: scale(0.97);
-}
-.auth-switch-text {
-  margin-top: 20px;
-  font-size: 12px;
-  color: var(--muted2);
-}
-.auth-switch-link {
-  color: var(--gold2);
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-}
+#mode-banner.online{background:rgba(10,145,103,0.1);border:1px solid rgba(10,145,103,0.25);color:var(--em2);}
+#mode-banner.offline{background:rgba(200,136,58,0.1);border:1px solid rgba(200,136,58,0.25);color:var(--gold2);}
+#mode-banner.checking{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted2);}
+.mode-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.mode-dot.online{background:var(--em2);box-shadow:0 0 6px var(--em2);}
+.mode-dot.offline{background:var(--gold2);box-shadow:0 0 6px var(--gold2);}
+.mode-dot.checking{background:var(--muted2);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* --- Collapsible Card Styles --- */
-.cust-item {
-  background: rgba(12,19,16,0.75);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  margin-bottom: 16px;
-  overflow: hidden;
-  transition: all 0.2s;
-}
-.cust-item.has-debt {
-  border-left: 3px solid var(--rose);
-}
-.cust-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 18px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.cust-header:active {
-  background: rgba(255,255,255,0.02);
-}
-.cust-header-left {
-  flex: 1;
-}
-.cust-name-header {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--gold2);
-  margin-bottom: 4px;
-}
-.cust-phone-header {
-  font-size: 11px;
-  color: var(--muted2);
-}
-.cust-balance-badge {
-  text-align: right;
-}
-.cust-bal-num {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 500;
-}
-.cust-bal-num.debt { color: #FB8097; }
-.cust-bal-num.clear { color: var(--em2); }
-.cust-bal-lbl {
-  font-size: 9px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-.expand-icon {
-  font-size: 20px;
-  margin-left: 12px;
-  color: var(--muted2);
-  transition: transform 0.2s;
-}
-.cust-item.expanded .expand-icon {
-  transform: rotate(180deg);
-}
-.cust-details {
-  display: none;
-  padding: 0 18px 18px 18px;
-  border-top: 1px solid var(--border);
-  background: rgba(0,0,0,0.2);
-}
-.cust-item.expanded .cust-details {
-  display: block;
-}
-.stepper-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--s2);
-  border-radius: 40px;
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  width: 100%;
-}
-.stepper-btn {
-  background: rgba(255,255,255,0.08);
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 30px;
-  color: var(--gold2);
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.1s;
-}
-.stepper-btn:active {
-  transform: scale(0.92);
-  background: rgba(200,136,58,0.3);
-}
-.stepper-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 500;
-  text-align: center;
-  font-family: var(--sans);
-  outline: none;
-}
-.history-log {
-  margin-top: 12px;
-  background: rgba(0,0,0,0.3);
-  border-radius: 12px;
-  padding: 10px;
-  font-size: 10px;
-  max-height: 120px;
-  overflow-y: auto;
-}
-.history-title {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-.history-entry {
-  font-family: monospace;
-  font-size: 9px;
-  padding: 4px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  color: var(--muted2);
-}
-.history-entry span {
-  color: var(--gold2);
-}
-.cust-edit-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 16px 0 12px;
-}
-.cust-edit-field {
-  flex: 1;
-  min-width: 120px;
-}
-.cust-edit-field label {
-  font-size: 8px;
-  color: var(--muted);
-  display: block;
-  margin-bottom: 5px;
-  letter-spacing: 1px;
-}
-.cust-name-edit, .cust-phone-edit {
-  width: 100%;
-  background: var(--s2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 8px 10px;
-  color: var(--text);
-  font-size: 12px;
-  outline: none;
-}
-.balance-preview {
-  font-size: 11px;
-  font-weight: 600;
-  margin: 8px 0;
-  color: var(--em2);
-}
-.balance-preview.debt {
-  color: #FB8097;
-}
-.cust-action-btns {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin: 12px 0 8px;
-}
-.cust-update-btn, .cust-delete-btn, .refresh-overdue-btn, .set-overdue-btn {
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  border: none;
-}
-.cust-update-btn {
-  background: rgba(10,145,103,0.2);
-  color: var(--em2);
-  border: 1px solid rgba(10,145,103,0.3);
-}
-.cust-delete-btn {
-  background: rgba(229,69,98,0.15);
-  color: #FB8097;
-  border: 1px solid rgba(229,69,98,0.2);
-}
-.refresh-overdue-btn {
-  background: rgba(200,136,58,0.15);
-  color: var(--gold2);
-  border: 1px solid rgba(200,136,58,0.3);
-}
-.set-overdue-btn {
-  background: rgba(74,158,223,0.15);
-  color: #7AB8E8;
-  border: 1px solid rgba(74,158,223,0.3);
-}
-.overdue-badge {
-  font-size: 9px;
-  background: rgba(229,69,98,0.2);
-  color: #FB8097;
-  border-radius: 20px;
-  padding: 2px 8px;
-  display: inline-block;
-  margin-left: 8px;
-  font-weight: 600;
-}
-.overdue-badge.severe {
-  background: #E54562;
-  color: white;
-}
-.filter-dropdown {
-  width: 100%;
-  background: rgba(12,19,16,0.9);
-  border: 1px solid var(--border);
-  border-radius: 60px;
-  padding: 12px 16px;
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 14px;
-  margin-bottom: 18px;
-  cursor: pointer;
-}
-.cust-search-box {
-  display: flex;
-  gap: 10px;
-  background: rgba(12,19,16,0.75);
-  border: 1px solid var(--border);
-  border-radius: var(--r2);
-  padding: 8px 14px;
-  margin-bottom: 16px;
-}
-.cust-search-box input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-size: 14px;
-}
-.phdr {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.ptotal {
-  font-family: var(--serif);
-  font-size: 34px;
-  font-weight: 400;
-}
-.addbtn {
-  background: linear-gradient(135deg, var(--gold), #A86E28);
-  border: none;
-  border-radius: 100px;
-  padding: 10px 18px;
-  font-weight: 700;
-  cursor: pointer;
-}
-/* modal & report styles */
+/* AUTH */
+.auth-screen{max-width:340px;width:90%;background:rgba(12,19,16,0.92);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);border-radius:32px;padding:32px 24px 40px;box-shadow:0 20px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(200,136,58,0.15);text-align:center;}
+.auth-logo-main{font-family:var(--serif);font-size:42px;font-weight:600;background:linear-gradient(135deg,#E9B96E,#C8883A);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+.auth-logo-sub{font-size:8px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:6px;margin-bottom:20px;}
+.auth-brand-eye{font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;}
+.auth-brand-name{font-family:var(--serif);font-size:36px;font-weight:400;color:var(--text);margin-bottom:28px;}
+.auth-brand-name em{color:var(--gold);font-style:italic;}
+.auth-tabs{display:flex;gap:8px;background:rgba(0,0,0,0.3);border-radius:60px;padding:4px;margin-bottom:28px;}
+.auth-tab{flex:1;background:transparent;border:none;padding:10px 0;font-family:var(--sans);font-weight:600;font-size:14px;color:var(--muted2);border-radius:60px;cursor:pointer;transition:all .2s;}
+.auth-tab.active{background:rgba(200,136,58,0.15);color:var(--gold2);box-shadow:inset 0 0 0 1px rgba(200,136,58,0.3);}
+.auth-input-group{margin-bottom:18px;text-align:left;}
+.auth-input-group label{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.auth-input-group input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;color:var(--text);font-size:15px;font-family:var(--sans);outline:none;transition:border .2s;}
+.auth-input-group input:focus{border-color:var(--gold);}
+.auth-error{background:rgba(229,69,98,0.12);border:1px solid rgba(229,69,98,0.3);border-radius:12px;padding:10px;font-size:12px;color:#FB8097;margin:16px 0 12px;display:none;}
+.auth-error.show{display:block;}
+.auth-submit-btn{width:100%;background:linear-gradient(135deg,var(--gold),#A86E28);border:none;border-radius:40px;padding:14px;font-family:var(--sans);font-weight:700;font-size:16px;color:#0A0600;cursor:pointer;margin-top:8px;box-shadow:0 4px 14px rgba(200,136,58,0.3);transition:transform .15s;}
+.auth-submit-btn:active{transform:scale(0.97);}
+.auth-switch-text{margin-top:20px;font-size:12px;color:var(--muted2);}
+.auth-switch-link{color:var(--gold2);font-weight:600;cursor:pointer;text-decoration:underline;}
+
+/* CARDS */
+.cust-item{background:rgba(12,19,16,0.75);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden;transition:all .2s;}
+.cust-item.has-debt{border-left:3px solid var(--rose);}
+.cust-header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;cursor:pointer;}
+.cust-header:active{background:rgba(255,255,255,0.02);}
+.cust-header-left{flex:1;}
+.cust-name-header{font-size:16px;font-weight:700;color:var(--gold2);margin-bottom:4px;}
+.cust-phone-header{font-size:11px;color:var(--muted2);}
+.cust-balance-badge{text-align:right;}
+.cust-bal-num{font-family:var(--serif);font-size:26px;font-weight:500;}
+.cust-bal-num.debt{color:#FB8097;} .cust-bal-num.clear{color:var(--em2);}
+.cust-bal-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;}
+.expand-icon{font-size:20px;margin-left:12px;color:var(--muted2);transition:transform .2s;}
+.cust-item.expanded .expand-icon{transform:rotate(180deg);}
+.cust-details{display:none;padding:0 18px 18px;border-top:1px solid var(--border);background:rgba(0,0,0,0.2);}
+.cust-item.expanded .cust-details{display:block;}
+.balance-preview{font-size:13px;font-weight:600;margin:12px 0 6px;padding:8px 12px;background:rgba(0,0,0,0.3);border-radius:12px;text-align:center;}
+.balance-preview.debt{color:#FB8097;}
+.balance-preview.clear{color:var(--em2);}
+.overdue-row{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.25);border-radius:12px;padding:8px 12px;margin:8px 0;}
+.overdue-label{font-size:11px;color:var(--muted2);}
+.overdue-days{font-weight:700;font-size:14px;}
+.overdue-days.severe{color:#FB8097;}
+.cal-icon{cursor:pointer;background:rgba(74,158,223,0.2);border-radius:20px;padding:4px 8px;font-size:11px;color:#7AB8E8;transition:transform 0.1s;}
+.cal-icon:active{transform:scale(0.95);}
+.history-log{margin-top:12px;background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;font-size:10px;max-height:120px;overflow-y:auto;}
+.history-title{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:6px;}
+.history-entry{font-family:monospace;font-size:9px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:var(--muted2);}
+.history-entry span{color:var(--gold2);}
+.overdue-badge{font-size:9px;background:rgba(229,69,98,0.2);color:#FB8097;border-radius:20px;padding:2px 8px;display:inline-block;margin-left:8px;font-weight:600;}
+.overdue-badge.severe{background:#E54562;color:white;}
+.filter-dropdown{width:100%;background:rgba(12,19,16,0.9);border:1px solid var(--border);border-radius:60px;padding:12px 16px;color:var(--text);font-family:var(--sans);font-size:14px;margin-bottom:18px;cursor:pointer;}
+.cust-search-box{display:flex;gap:10px;background:rgba(12,19,16,0.75);border:1px solid var(--border);border-radius:var(--r2);padding:8px 14px;margin-bottom:16px;}
+.cust-search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;}
+.phdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px; gap:12px; flex-wrap:wrap;}
+.ptotal{font-family:var(--serif);font-size:34px;font-weight:400;}
+.addbtn{background:linear-gradient(135deg,var(--gold),#A86E28);border:none;border-radius:100px;padding:10px 18px;font-weight:700;cursor:pointer;color:#0A0600;font-family:var(--sans);}
+.all-txns-btn-small{background:rgba(74,158,223,0.2);border:1px solid rgba(74,158,223,0.4);border-radius:100px;padding:10px 18px;font-weight:700;cursor:pointer;color:#7AB8E8;font-family:var(--sans); font-size:13px; display:inline-flex; align-items:center; gap:6px;}
+.all-txns-btn-small:active{transform:scale(0.96);}
 .moverlay{position:fixed;inset:0;z-index:50;background:transparent;display:none;align-items:flex-end;justify-content:center;}
 .moverlay.on{display:flex;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);}
 .msheet{background:rgba(10,15,11,0.96);width:100%;max-width:430px;border-radius:28px 28px 0 0;border-top:1px solid rgba(255,255,255,0.08);padding:0 22px 48px;max-height:92vh;overflow-y:auto;}
@@ -499,7 +146,7 @@ body::after{
 .fld{margin-bottom:20px;}
 .fld label{display:block;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:9px;}
 .fld input,.fld select{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;color:var(--text);font-size:15px;outline:none;}
-.sbtn{width:100%;padding:16px;border-radius:var(--r2);border:none;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
+.sbtn{width:100%;padding:16px;border-radius:var(--r2);border:none;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;font-family:var(--sans);}
 .sbtn.bl{background:linear-gradient(135deg,var(--sapp),#2a6fa8);color:#fff;}
 .sbtn.gn{background:linear-gradient(135deg,var(--em),#076B4E);color:#fff;}
 .sbtn.am{background:linear-gradient(135deg,var(--gold),#A86E28);color:#0A0600;}
@@ -509,73 +156,44 @@ body::after{
 .cd-stat{background:var(--s3);border-radius:var(--r2);padding:12px;}
 .cd-stat-lbl{font-size:8.5px;color:var(--muted);margin-bottom:4px;}
 .cd-stat-val{font-family:var(--serif);font-size:22px;font-weight:500;}
-.cd-actions{display:flex;gap:12px;margin:20px 0;}
-.cd-act-btn{flex:1;padding:12px;border-radius:var(--r2);font-weight:700;text-align:center;cursor:pointer;}
+.cd-actions{display:flex;gap:12px;margin:20px 0 12px;}
+.cd-act-btn{flex:1;padding:12px;border-radius:var(--r2);font-weight:700;text-align:center;cursor:pointer;border:none;font-family:var(--sans);font-size:13px;}
 .cd-act-btn.pay{background:linear-gradient(135deg,var(--em),#076B4E);color:#fff;}
 .cd-act-btn.credit{background:linear-gradient(135deg,var(--gold),#A86E28);color:#0A0600;}
 .cd-txn-list .cd-txn{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
 .report-buttons{display:flex;flex-direction:column;gap:12px;margin:20px 0;}
-.whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:40px;padding:14px;color:white;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;}
+.whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:40px;padding:14px;color:white;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;width:100%;font-family:var(--sans);}
 .whatsapp-btn:active{transform:scale(0.97);}
-/* modal stepper */
-.modal-stepper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--s2);
-  border-radius: 60px;
-  padding: 4px 12px;
-  border: 1px solid var(--border);
-}
-.modal-stepper .stepper-btn {
-  background: rgba(255,255,255,0.1);
-  width: 40px;
-  height: 40px;
-  font-size: 22px;
-}
-.modal-stepper .stepper-input {
-  font-size: 18px;
-  font-weight: 600;
-  text-align: center;
-  background: transparent;
-  border: none;
-  color: var(--text);
-  width: 100px;
-}
-/* Logo in app header */
-.app-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.app-logo-main {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 600;
-  background: linear-gradient(135deg, #E9B96E, #C8883A);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  line-height: 1;
-}
-.app-logo-sub {
-  font-size: 6px;
-  letter-spacing: 2px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
+.modal-stepper{display:flex;align-items:center;gap:12px;background:var(--s2);border-radius:60px;padding:4px 12px;border:1px solid var(--border);}
+.modal-stepper .stepper-btn{background:rgba(255,255,255,0.1);width:40px;height:40px;font-size:22px;}
+.modal-stepper .stepper-input{font-size:18px;font-weight:600;text-align:center;background:transparent;border:none;color:var(--text);width:100px;font-family:var(--sans);}
+.app-logo{display:flex;flex-direction:column;align-items:flex-start;}
+.app-logo-main{font-family:var(--serif);font-size:22px;font-weight:600;background:linear-gradient(135deg,#E9B96E,#C8883A);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+.app-logo-sub{font-size:6px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.plbl{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
+.cust-alert-banner{display:none;background:rgba(229,69,98,0.08);border:1px solid rgba(229,69,98,0.2);border-radius:var(--r2);padding:10px 14px;font-size:12px;color:#FB8097;margin-bottom:14px;}
+.cust-alert-banner.show{display:block;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted2);font-size:14px;display:flex;flex-direction:column;gap:10px;align-items:center;}
+.txn-filter-bar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.txn-filter-bar input{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:40px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;}
+.txn-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);}
+.txn-left{flex:1;}
+.txn-cust-name{font-weight:700;color:var(--gold2);font-size:13px;}
+.txn-date{font-size:9px;color:var(--muted);margin-top:4px;}
+.txn-note{font-size:10px;color:var(--muted2);margin-top:2px;}
+.txn-amount{font-weight:700;font-size:14px;margin-left:12px;white-space:nowrap;}
+.txn-amount.credit{color:#FB8097;}
+.txn-amount.debit{color:var(--em2);}
 </style>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
 
-<!-- AUTH OVERLAY with Logo -->
-<div id="auth-overlay">
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay" style="position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(3,6,4,0.95);backdrop-filter:blur(20px);">
   <div class="auth-screen">
-    <div class="auth-logo">
-      <div class="auth-logo-main">SAGE</div>
-      <div class="auth-logo-sub">SOFTWARE DEVELOPMENT COMPANY</div>
-    </div>
+    <div class="auth-logo-main">SAGE</div>
+    <div class="auth-logo-sub">Software Development Company</div>
     <div class="auth-brand-eye">Smart Duka</div>
     <div class="auth-brand-name">Smart <em>Duka</em></div>
     <div class="auth-tabs">
@@ -593,319 +211,190 @@ body::after{
     </div>
     <div class="auth-error" id="auth-error"></div>
     <button class="auth-submit-btn" id="auth-submit-btn" onclick="authSubmit()">Sign In</button>
-    <div class="auth-switch-text" id="auth-switch-msg">Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span></div>
+    <div class="auth-switch-text" id="auth-switch-msg">
+      Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span>
+    </div>
   </div>
 </div>
 
-<!-- MAIN APP with Logo in Header -->
+<!-- MAIN APP -->
 <div id="app" style="display:none;">
-<div id="hdr">
-  <div class="hdr-row">
-    <div class="app-logo">
-      <div class="app-logo-main">SAGE</div>
-      <div class="app-logo-sub">SOFTWARE DEVELOPMENT COMPANY</div>
-      <div class="brand-eye" style="margin-top: 6px;">Smart Duka</div>
-      <div class="brand-name"><span id="shop-name-display">My Shop</span></div>
+  <div id="hdr">
+    <div class="hdr-row">
+      <div class="app-logo">
+        <div class="app-logo-main">SAGE</div>
+        <div class="app-logo-sub">Software Development Company</div>
+        <div class="brand-eye" style="margin-top:6px;">Smart Duka</div>
+        <div class="brand-name"><span id="shop-name-display">My Shop</span></div>
+      </div>
+      <div class="header-buttons">
+        <button class="report-btn" onclick="openReportModal()">📊 Reports</button>
+        <button class="logout-btn" onclick="authLogout()">↪</button>
+      </div>
     </div>
-    <div class="header-buttons">
-      <button class="report-btn" onclick="openReportModal()">📊 Reports</button>
-      <button class="logout-btn" onclick="authLogout()">↪</button>
+  </div>
+  <div id="content">
+    <div id="pane-customers" class="pane on">
+      <div id="mode-banner" class="checking">
+        <div class="mode-dot checking" id="mode-dot"></div>
+        <span id="mode-text">Checking connection…</span>
+      </div>
+      <div class="phdr">
+        <div><div class="plbl">Client Deck</div><div class="ptotal" id="p-cust">0 Accounts</div></div>
+        <div style="display:flex; gap:10px;">
+          <button class="all-txns-btn-small" onclick="openAllTransactionsModal()">📋 All Transactions</button>
+          <button class="addbtn" onclick="openModal('addCustomer')">＋ Add Client</button>
+        </div>
+      </div>
+      <div class="cust-alert-banner" id="cust-alert"><span id="cust-alert-text"></span></div>
+      <div class="cust-search-box">
+        <span>🔍</span>
+        <input type="text" id="cust-search-input" placeholder="Search clients…" oninput="filterCustomers()">
+      </div>
+      <select id="filter-dropdown" class="filter-dropdown" onchange="setCustFilter(this.value)">
+        <option value="all">👥 All Clients</option>
+        <option value="debt">⚠️ Has Debt</option>
+        <option value="clear">✅ Cleared</option>
+      </select>
+      <div id="cust-list"></div>
     </div>
   </div>
 </div>
-<div id="content"><div id="pane-customers" class="pane on"><div class="phdr"><div><div class="plbl">Client Deck</div><div class="ptotal" id="p-cust">0 Accounts</div></div><button class="addbtn" onclick="openModal('addCustomer')">＋ Add Client</button></div><div class="cust-alert-banner" id="cust-alert">⚠️ <span id="cust-alert-text"></span></div><div class="cust-search-box"><span>🔍</span><input type="text" id="cust-search-input" placeholder="Search..." oninput="filterCustomers()"></div><select id="filter-dropdown" class="filter-dropdown" onchange="setCustFilter(this.value)"><option value="all">👥 All Clients</option><option value="debt">⚠️ Has Debt</option><option value="clear">✅ Cleared</option></select><div id="cust-list"></div></div></div>
+
+<!-- ALL TRANSACTIONS MODAL -->
+<div class="moverlay" id="mo-allTxns">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mhdr">
+      <div class="mtitle">📜 All Transactions</div>
+      <button class="mclose" onclick="cm('allTxns')">✕</button>
+    </div>
+    <div class="txn-filter-bar">
+      <input type="text" id="txn-search" placeholder="🔍 Filter by client or note..." oninput="renderAllTransactions()">
+    </div>
+    <div id="all-txns-list" style="max-height:65vh;overflow-y:auto;"></div>
+  </div>
 </div>
 
-<!-- MODALS (unchanged functionality) -->
-<div class="moverlay" id="mo-report"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Share Report</div><button class="mclose" onclick="cm('report')">✕</button></div><div class="report-buttons"><button class="whatsapp-btn" onclick="shareReport('daily')"><span>📅</span> Daily Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('weekly')"><span>📆</span> Weekly Report (WhatsApp)</button><button class="whatsapp-btn" onclick="shareReport('monthly')"><span>📊</span> Monthly Report (WhatsApp)</button></div></div></div>
-<div class="moverlay" id="mo-overduePicker"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Set Overdue Date</div><button class="mclose" onclick="cm('overduePicker')">✕</button></div><div class="fld"><label>Last Credit Date</label><input type="date" id="overdue-date-input"></div><div class="fld"><label>Manual Days</label><input type="number" id="overdue-days-manual" placeholder="Days overdue"></div><button class="sbtn bl" onclick="applyOverdueDate()">Apply</button></div></div>
-<div class="moverlay" id="mo-addCustomer"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Add Client</div><button class="mclose" onclick="cm('addCustomer')">✕</button></div><div class="fld"><label>Full Name</label><input type="text" id="cn-name"></div><div class="fld"><label>Phone</label><input type="tel" id="cn-phone"></div><button class="sbtn bl" onclick="addCustomer()">Add →</button></div></div>
-<div class="moverlay" id="mo-custDetail"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Profile</div><button class="mclose" onclick="cm('custDetail')">✕</button><div class="cd-hero"><div class="cd-name-lbl" id="cd-name">—</div><div class="cd-phone-lbl" id="cd-phone">—</div><div class="cd-stats-grid"><div class="cd-stat"><div class="cd-stat-lbl">Balance</div><div class="cd-stat-val" id="cd-balance">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Total Spent</div><div class="cd-stat-val" id="cd-spent">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Credit</div><div class="cd-stat-val" id="cd-credit">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Payments</div><div class="cd-stat-val" id="cd-debit">KES 0</div></div></div></div><div class="cd-actions"><button class="cd-act-btn pay" onclick="openRecordPayment()">✅ Payment</button><button class="cd-act-btn credit" onclick="openSellCredit()">+ Credit</button></div><div id="cd-txns" class="cd-txn-list"></div><button class="sbtn rd" onclick="deleteCurrentCustomer()">Delete</button></div></div>
-<div class="moverlay" id="mo-recordPayment"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Record Payment</div><button class="mclose" onclick="cm('recordPayment')">✕</button></div><div style="background:rgba(10,145,103,0.07); border-radius:var(--r2); padding:14px; margin-bottom:20px"><div style="font-size:9.5px; color:var(--muted);">Outstanding Balance</div><div style="font-family:var(--serif); font-size:28px;" id="rp-balance-display">KES 0</div></div>
-<div class="fld"><label>Amount (KES)</label><div class="modal-stepper"><button class="stepper-btn" onclick="stepModalAmount('rp-amount', -100)">−</button><input type="number" id="rp-amount" class="stepper-input" value="0" step="100"><button class="stepper-btn" onclick="stepModalAmount('rp-amount', 100)">+</button></div></div>
-<div class="fld"><label>Note (optional)</label><input type="text" id="rp-note" placeholder="e.g., Cash payment"></div>
-<button class="sbtn gn" onclick="recordPayment()">Record Payment ✓</button></div></div>
-<div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05); border-radius:var(--r2); padding:14px; margin-bottom:20px"><div style="font-size:9.5px;">⚠ This will increase client's debt</div><div>Client: <strong id="sc-cust-name">—</strong></div></div>
-<div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g., Groceries"></div>
-<div class="fld"><label>Amount (KES)</label><div class="modal-stepper"><button class="stepper-btn" onclick="stepModalAmount('sc-amount', -100)">−</button><input type="number" id="sc-amount" class="stepper-input" value="0" step="100"><button class="stepper-btn" onclick="stepModalAmount('sc-amount', 100)">+</button></div></div>
-<button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
+<!-- OTHER MODALS -->
+<div class="moverlay" id="mo-report"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Share Report</div><button class="mclose" onclick="cm('report')">✕</button></div><div class="report-buttons"><button class="whatsapp-btn" onclick="shareReport('daily')"><span>📅</span> Daily Report</button><button class="whatsapp-btn" onclick="shareReport('weekly')"><span>📆</span> Weekly Report</button><button class="whatsapp-btn" onclick="shareReport('monthly')"><span>📊</span> Monthly Report</button></div></div></div>
+<div class="moverlay" id="mo-overduePicker"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Set Overdue Date</div><button class="mclose" onclick="cm('overduePicker')">✕</button></div><div class="fld"><label>Last Credit Date (or promise date)</label><input type="date" id="overdue-date-input"></div><div class="fld"><label>Manual Days Overdue</label><input type="number" id="overdue-days-manual" placeholder="Days"></div><button class="sbtn bl" onclick="applyOverdueDate()">Apply</button></div></div>
+<div class="moverlay" id="mo-addCustomer"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Add Client</div><button class="mclose" onclick="cm('addCustomer')">✕</button></div><div class="fld"><label>Full Name</label><input type="text" id="cn-name" placeholder="e.g. Jane Wanjiku"></div><div class="fld"><label>Phone</label><input type="tel" id="cn-phone" placeholder="07xx xxx xxx"></div><button class="sbtn bl" onclick="addCustomer()">Add Client →</button></div></div>
+<div class="moverlay" id="mo-custDetail"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Profile</div><button class="mclose" onclick="cm('custDetail')">✕</button></div><div class="cd-hero"><div style="font-family:var(--serif);font-size:24px;font-weight:500;color:var(--gold2);" id="cd-name">—</div><div style="font-size:12px;color:var(--muted2);margin-top:4px;" id="cd-phone">—</div><div class="cd-stats-grid"><div class="cd-stat"><div class="cd-stat-lbl">Balance</div><div class="cd-stat-val" id="cd-balance">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Total Spent</div><div class="cd-stat-val" id="cd-spent">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Credit</div><div class="cd-stat-val" id="cd-credit">KES 0</div></div><div class="cd-stat"><div class="cd-stat-lbl">Payments</div><div class="cd-stat-val" id="cd-debit">KES 0</div></div></div></div><div class="cd-actions"><button class="cd-act-btn pay" onclick="openRecordPayment()">✅ Payment</button><button class="cd-act-btn credit" onclick="openSellCredit()">＋ Credit</button></div><button class="whatsapp-btn" id="wa-reminder-btn" onclick="sendWhatsAppReminder()" style="margin-bottom:14px;">📲 Send WhatsApp Reminder</button><div id="cd-txns" class="cd-txn-list"></div><button class="sbtn rd" style="margin-top:20px;" onclick="deleteCurrentCustomer()">🗑 Delete Client</button></div></div>
+<div class="moverlay" id="mo-recordPayment"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Record Payment</div><button class="mclose" onclick="cm('recordPayment')">✕</button></div><div style="background:rgba(10,145,103,0.07);border-radius:var(--r2);padding:14px;margin-bottom:20px;"><div style="font-size:9.5px;color:var(--muted);">Outstanding Balance</div><div style="font-family:var(--serif);font-size:28px;" id="rp-balance-display">KES 0</div></div><div class="fld"><label>Amount (KES)</label><div class="modal-stepper"><button class="stepper-btn" onclick="stepModal('rp-amount',-100)">−</button><input type="number" id="rp-amount" class="stepper-input" value="0" step="100"><button class="stepper-btn" onclick="stepModal('rp-amount',100)">+</button></div></div><div class="fld"><label>Note (optional)</label><input type="text" id="rp-note" placeholder="e.g. Cash payment"></div><button class="sbtn gn" onclick="recordPayment()">Record Payment ✓</button></div></div>
+<div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05);border-radius:var(--r2);padding:14px;margin-bottom:20px;"><div style="font-size:9.5px;">⚠ This increases the client's debt</div><div style="margin-top:6px;">Client: <strong id="sc-cust-name">—</strong></div></div><div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g. Groceries"></div><div class="fld"><label>Amount (KES)</label><div class="modal-stepper"><button class="stepper-btn" onclick="stepModal('sc-amount',-100)">−</button><input type="number" id="sc-amount" class="stepper-input" value="0" step="100"><button class="stepper-btn" onclick="stepModal('sc-amount',100)">+</button></div></div><button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// Full client management with collapsible cards, steppers, history, modal +/-, and logo
+// ---------- Core logic with overdue auto-calculation and calendar picker ----------
+const API_BASE = 'http://localhost:5000';
+let BACKEND_ONLINE = false;
+let db = null;
 let customers = [], customerTransactions = [];
 let custFilter = 'all', custSearch = '';
 let selectedCustomerId = null, pendingOverdueCid = null;
-let db = null, currentUser = null;
+let currentUser = null;
 let clientHistory = new Map();
 
-function stepModalAmount(inputId, delta) {
-  let inp = document.getElementById(inputId);
-  if(inp) {
-    let val = parseFloat(inp.value) || 0;
-    let newVal = val + delta;
-    if(newVal < 0) newVal = 0;
-    inp.value = newVal;
-  }
+async function pingBackend() {
+  setModeBanner('checking', 'Checking connection…');
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 4000);
+    const r = await fetch(API_BASE + '/api/customers', { signal: ctrl.signal });
+    clearTimeout(timer);
+    BACKEND_ONLINE = r.ok;
+  } catch { BACKEND_ONLINE = false; }
+  setModeBanner(BACKEND_ONLINE ? 'online' : 'offline', BACKEND_ONLINE ? '🟢 Online — synced to cloud' : '🟡 Offline — saved locally');
 }
+function setModeBanner(type, text) { const b=document.getElementById('mode-banner'); const d=document.getElementById('mode-dot'); const t=document.getElementById('mode-text'); b.className=type; d.className='mode-dot '+type; t.textContent=text; }
+async function apiFetch(method, endpoint, body) { const opts={method,headers:{'Content-Type':'application/json'}}; if(body) opts.body=JSON.stringify(body); const r=await fetch(API_BASE+endpoint,opts); if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error); return r.json(); }
+const apiGet=ep=>apiFetch('GET',ep); const apiPost=(ep,b)=>apiFetch('POST',ep,b); const apiPut=(ep,b)=>apiFetch('PUT',ep,b); const apiDelete=ep=>apiFetch('DELETE',ep);
+function getUserDBName(uid){return `duka_${uid}`;}
+async function openUserDB(uid){return new Promise((res,rej)=>{const r=indexedDB.open(getUserDBName(uid),3); r.onerror=()=>rej(r.error); r.onsuccess=()=>{db=r.result; res(db);}; r.onupgradeneeded=ev=>{const d=ev.target.result; if(!d.objectStoreNames.contains('customers')) d.createObjectStore('customers',{keyPath:'id',autoIncrement:true}); if(!d.objectStoreNames.contains('customerTransactions')){const s=d.createObjectStore('customerTransactions',{keyPath:'id',autoIncrement:true}); s.createIndex('customerId','customerId');}};});}
+function idb(store,mode='readonly'){return db.transaction(store,mode).objectStore(store);}
+const idbGetAll=s=>new Promise((res,rej)=>{const r=idb(s).getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);});
+const idbAdd=(s,v)=>new Promise((res,rej)=>{const r=idb(s,'readwrite').add(v); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);});
+const idbPut=(s,v)=>new Promise((res,rej)=>{const r=idb(s,'readwrite').put(v); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);});
+const idbDelete=(s,k)=>new Promise((res,rej)=>{const r=idb(s,'readwrite').delete(k); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);});
+const idbGetByIndex=(s,idx,val)=>new Promise((res,rej)=>{const r=idb(s).index(idx).getAll(val); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);});
 
-const fmt = n => 'KES ' + (n||0).toLocaleString('en-KE');
-const fmtShort = n => { let v = Math.abs(n||0); return v>=1000?(n<0?'-':'')+(v/1000).toFixed(1)+'K':String(Math.round(n||0)); };
-function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+async function loadData() {
+  if(BACKEND_ONLINE){ const[rc,rt]=await Promise.all([apiGet('/api/customers'),apiGet('/api/transactions')]); customers=rc.map(c=>({...c,id:(c._id||c.id)?.toString()})); customerTransactions=rt.map(t=>({...t,id:(t._id||t.id)?.toString(),customerId:(t.customerId?._id||t.customerId)?.toString()})); }
+  else{ customers=(await idbGetAll('customers')).map(c=>({...c,id:c.id})); customerTransactions=(await idbGetAll('customerTransactions')).map(t=>({...t,id:t.id,customerId:t.customerId})); }
+}
+async function refreshData(){ await loadData(); renderCustomers(); }
 
-async function recalcCustomerFromTransactions(cust) {
-  let creditSum = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'credit').reduce((s,t)=>s+t.amount,0);
-  let debitSum = customerTransactions.filter(t => t.customerId === cust.id && t.type === 'debit').reduce((s,t)=>s+t.amount,0);
-  cust.credit = creditSum;
-  cust.debit = debitSum;
-  cust.balance = creditSum - debitSum;
-  cust.totalSpent = creditSum;
-  await updateItem('customers', cust);
-}
-
-async function updateFullCustomer(cid, name, phone, creditVal, paidVal, overdueDaysVal) {
-  let cust = customers.find(c=>c.id===cid);
-  if(!cust) return;
-  let history = clientHistory.get(cid) || [];
-  history.unshift({ timestamp: new Date(), name: cust.name, credit: cust.credit, debit: cust.debit });
-  clientHistory.set(cid, history);
-  cust.name = name.trim() || cust.name;
-  cust.phone = phone.trim() || '';
-  cust.credit = parseFloat(creditVal)||0;
-  cust.debit = parseFloat(paidVal)||0;
-  cust.balance = cust.credit - cust.debit;
-  cust.totalSpent = cust.credit;
-  let od = parseInt(overdueDaysVal);
-  if(!isNaN(od) && od>=0) cust.manualOverdueDays = od;
-  else delete cust.manualOverdueDays;
-  cust.lastActivity = new Date().toISOString();
-  await updateItem('customers', cust);
-  await refreshData();
-  renderCustomers();
-}
-
-function computeOverdueDays(cust) {
-  if(cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null) return cust.manualOverdueDays;
-  const creditTxns = customerTransactions.filter(t=>t.customerId===cust.id && t.type==='credit').sort((a,b)=>new Date(b.date)-new Date(a.date));
-  if(creditTxns.length===0) return 0;
-  let diff = Math.floor((new Date() - new Date(creditTxns[0].date))/86400000);
-  return diff>0?diff:0;
-}
-
-function stepValue(inputId, delta, custId, fieldType) {
-  let inp = document.getElementById(inputId);
-  if(inp) {
-    let val = parseFloat(inp.value) || 0;
-    let newVal = val + delta;
-    if(fieldType === 'overdue' && newVal < 0) newVal = 0;
-    if((fieldType === 'credit' || fieldType === 'paid') && newVal < 0) newVal = 0;
-    inp.value = newVal;
-    previewBalance(custId);
-  }
-}
-function previewBalance(custId) {
-  let cred = parseFloat(document.getElementById(`cred_${custId}`)?.value)||0;
-  let paid = parseFloat(document.getElementById(`paid_${custId}`)?.value)||0;
-  let previewSpan = document.getElementById(`balPreview_${custId}`);
-  if(previewSpan) {
-    previewSpan.textContent = `Balance: ${fmt(cred - paid)}`;
-    previewSpan.className = `balance-preview ${(cred-paid)>0?'debt':'clear'}`;
-  }
-}
-function toggleCard(cid) { document.getElementById(`card_${cid}`).classList.toggle('expanded'); }
-
-function renderCustomers() {
-  let filtered = customers.filter(c => {
-    if(custFilter === 'debt') return (c.balance||0) > 0;
-    if(custFilter === 'clear') return (c.balance||0) === 0;
-    return true;
-  }).filter(c => c.name.toLowerCase().includes(custSearch) || (c.phone||'').includes(custSearch));
-  document.getElementById('p-cust').textContent = customers.length + ' Client' + (customers.length!==1?'s':'');
-  let highDebt = customers.filter(c=>(c.balance||0)>1000);
-  let alertEl = document.getElementById('cust-alert');
-  if(highDebt.length) { alertEl.classList.add('show'); document.getElementById('cust-alert-text').innerHTML = `⚠️ High balance: ${highDebt.map(c=>c.name).join(', ')}`; } 
-  else alertEl.classList.remove('show');
-  if(!filtered.length) { document.getElementById('cust-list').innerHTML = `<div class="empty-state"><div>👥</div><div>${customers.length?'No matches':'No clients yet'}</div></div>`; return; }
-  let html = '';
-  for(let c of filtered) {
-    let hasDebt = (c.balance||0) > 0;
-    let overdue = hasDebt ? computeOverdueDays(c) : 0;
-    let overdueBadge = '';
-    if(hasDebt && overdue>0) overdueBadge = `<span class="overdue-badge ${overdue>=30?'severe':''}">⚠️ ${overdue}d</span>`;
-    let history = clientHistory.get(c.id) || [];
-    let historyHtml = '';
-    if(history.length) {
-      historyHtml = `<div class="history-log"><div class="history-title">📜 UPDATE HISTORY (${history.length})</div>${history.map(h => `<div class="history-entry">📅 ${new Date(h.timestamp).toLocaleTimeString()} · <span>${escapeHtml(h.name)}</span> | Credit: ${fmt(h.credit)} | Paid: ${fmt(h.debit)}</div>`).join('')}</div>`;
-    }
-    html += `<div class="cust-item ${hasDebt?'has-debt':''}" id="card_${c.id}">
-      <div class="cust-header" onclick="toggleCard(${c.id})">
-        <div class="cust-header-left">
-          <div class="cust-name-header">${escapeHtml(c.name)} ${overdueBadge}</div>
-          <div class="cust-phone-header">${c.phone||'—'}</div>
-        </div>
-        <div class="cust-balance-badge">
-          <div class="cust-bal-num ${hasDebt?'debt':'clear'}">${fmtShort(c.balance)}</div>
-          <div class="cust-bal-lbl">${hasDebt?'owes':'clear'}</div>
-        </div>
-        <div class="expand-icon">▼</div>
-      </div>
-      <div class="cust-details">
-        <div class="cust-edit-row">
-          <div class="cust-edit-field"><label>NAME</label><input type="text" id="name_${c.id}" value="${escapeHtml(c.name)}" class="cust-name-edit"></div>
-          <div class="cust-edit-field"><label>PHONE</label><input type="text" id="phone_${c.id}" value="${escapeHtml(c.phone||'')}" class="cust-phone-edit"></div>
-        </div>
-        <div class="cust-edit-row">
-          <div class="cust-edit-field"><label>CREDIT (OWED)</label><div class="stepper-group"><button class="stepper-btn" onclick="stepValue('cred_${c.id}', -100, ${c.id}, 'credit')">−</button><input type="number" id="cred_${c.id}" value="${c.credit||0}" class="stepper-input" step="any" onchange="previewBalance(${c.id})"><button class="stepper-btn" onclick="stepValue('cred_${c.id}', 100, ${c.id}, 'credit')">+</button></div></div>
-          <div class="cust-edit-field"><label>PAYMENTS MADE</label><div class="stepper-group"><button class="stepper-btn" onclick="stepValue('paid_${c.id}', -100, ${c.id}, 'paid')">−</button><input type="number" id="paid_${c.id}" value="${c.debit||0}" class="stepper-input" step="any" onchange="previewBalance(${c.id})"><button class="stepper-btn" onclick="stepValue('paid_${c.id}', 100, ${c.id}, 'paid')">+</button></div></div>
-          <div class="cust-edit-field"><label>OVERDUE DAYS</label><div class="stepper-group"><button class="stepper-btn" onclick="stepValue('over_${c.id}', -1, ${c.id}, 'overdue')">−</button><input type="number" id="over_${c.id}" value="${c.manualOverdueDays!==undefined?c.manualOverdueDays:computeOverdueDays(c)}" class="stepper-input" step="1"><button class="stepper-btn" onclick="stepValue('over_${c.id}', 1, ${c.id}, 'overdue')">+</button></div></div>
-        </div>
-        <div class="balance-preview ${hasDebt?'debt':'clear'}" id="balPreview_${c.id}">Balance: ${fmt(c.balance)}</div>
-        ${historyHtml}
-        <div class="cust-action-btns">
-          <button class="cust-update-btn" onclick="updateFullCustomer(${c.id}, document.getElementById('name_${c.id}').value, document.getElementById('phone_${c.id}').value, document.getElementById('cred_${c.id}').value, document.getElementById('paid_${c.id}').value, document.getElementById('over_${c.id}').value)">✓ SAVE CHANGES</button>
-          <button class="cust-delete-btn" onclick="deleteCustomerWithTransactions(${c.id})">🗑 DELETE</button>
-          <button class="refresh-overdue-btn" onclick="refreshOverdueForCustomer(${c.id})">⟳ RECALC</button>
-          <button class="set-overdue-btn" onclick="openOverduePicker(${c.id})">📅 SET DATE</button>
-        </div>
-      </div>
-    </div>`;
-  }
-  document.getElementById('cust-list').innerHTML = html;
-}
-
-async function shareReport(period) {
-  const shop = currentUser?.shopName || 'Smart Duka';
-  const now = new Date();
-  let periodLabel = '';
-  if(period === 'daily') periodLabel = `Daily Report - ${now.toLocaleDateString()}`;
-  else if(period === 'weekly') { let start = new Date(now); start.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1)); periodLabel = `Weekly Report (${start.toLocaleDateString()} - ${now.toLocaleDateString()})`; }
-  else periodLabel = `Monthly Report - ${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
-  const totalClients = customers.length, totalDebt = customers.reduce((s,c)=>s+(c.balance||0),0), debtors = customers.filter(c=>(c.balance||0)>0).length;
-  let clientLines = customers.slice(0,15).map(c=>{ let bal=c.balance||0; return `• ${c.name}: ${bal===0?'✓ Cleared':`💸 ${fmt(bal)}`}`; });
-  if(customers.length===0) clientLines=['No clients registered.'];
-  let clientListText = clientLines.join('\n');
-  if(customers.length>15) clientListText += `\n... and ${customers.length-15} more clients.`;
-  const msg = `*${shop}*\n📋 ${periodLabel}\n👥 Total Clients: ${totalClients}\n💳 Total Outstanding Debt: ${fmt(totalDebt)}\n⚠️ Clients with Debt: ${debtors}\n\n📋 *Client List:*\n${clientListText}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-}
-function openReportModal() { openModal('report'); }
-
-// IndexedDB operations (same as before, kept intact)
-async function getAll(store) { return new Promise((res,rej)=>{const r=db.transaction(store,'readonly').objectStore(store).getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
-async function updateItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).put(item); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
-async function deleteItem(store,id) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).delete(id); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error);}); }
-async function addItem(store,item) { return new Promise((res,rej)=>{const r=db.transaction(store,'readwrite').objectStore(store).add(item); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}); }
-async function loadData() { customers = await getAll('customers'); customerTransactions = await getAll('customerTransactions'); }
-async function refreshData() { await loadData(); renderCustomers(); }
-async function deleteCustomerWithTransactions(cid) {
-  if(!confirm('Delete client & all history?')) return;
-  await deleteItem('customers', cid);
-  let txns = customerTransactions.filter(t=>t.customerId===cid);
-  for(let t of txns) await deleteItem('customerTransactions', t.id);
-  clientHistory.delete(cid);
-  if(selectedCustomerId===cid) selectedCustomerId=null;
-  await refreshData(); cm('custDetail');
-}
-async function refreshOverdueForCustomer(cid) {
-  let cust = customers.find(c=>c.id===cid);
-  if(!cust) return;
-  delete cust.manualOverdueDays;
-  await recalcCustomerFromTransactions(cust);
-  await refreshData();
-  if(selectedCustomerId===cid) viewCustomer(cid);
-  renderCustomers();
-}
-function viewCustomer(id) {
-  let cust = customers.find(c=>c.id===id);
-  if(!cust) return;
-  selectedCustomerId = id;
-  document.getElementById('cd-name').textContent = cust.name;
-  document.getElementById('cd-phone').textContent = cust.phone||'';
-  document.getElementById('cd-balance').textContent = fmt(cust.balance);
-  document.getElementById('cd-spent').textContent = fmt(cust.totalSpent);
-  document.getElementById('cd-credit').textContent = fmt(cust.credit);
-  document.getElementById('cd-debit').textContent = fmt(cust.debit);
-  let txns = customerTransactions.filter(t=>t.customerId===id).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  document.getElementById('cd-txns').innerHTML = txns.map(t=>`<div class="cd-txn"><div><div class="cd-txn-type">${t.type==='credit'?'↑ Credit':(t.type==='sale'?'💰 Sale':'↓ Payment')}</div><div class="cd-txn-note">${escapeHtml(t.note||'—')}</div><div class="cd-txn-date">${new Date(t.date).toLocaleDateString()}</div></div><div class="cd-txn-amt">${t.type==='credit'?'+':'-'}${fmt(t.amount)}</div></div>`).join('')||'<div>No transactions</div>';
-  openModal('custDetail');
-}
-async function recordPayment() {
-  let amt = parseFloat(document.getElementById('rp-amount').value);
-  if(!amt||amt<=0) return alert('Valid amount');
-  let cust = customers.find(c=>c.id===selectedCustomerId);
-  if(!cust) return;
-  let actual = Math.min(amt, cust.balance||0);
-  if(actual<=0) return alert('No debt to clear');
-  await addItem('customerTransactions',{customerId:selectedCustomerId,type:'debit',amount:actual,note:document.getElementById('rp-note').value||'Payment',date:new Date().toISOString()});
-  await recalcCustomerFromTransactions(cust);
-  await refreshData();
-  cm('recordPayment');
-  if(selectedCustomerId) viewCustomer(selectedCustomerId);
-}
-async function sellOnCredit() {
-  let note = document.getElementById('sc-note').value.trim();
-  let amt = parseFloat(document.getElementById('sc-amount').value);
-  if(!note||!amt||amt<=0) return alert('Fill item and amount');
-  let cust = customers.find(c=>c.id===selectedCustomerId);
-  if(!cust) return;
-  await addItem('customerTransactions',{customerId:selectedCustomerId,type:'credit',amount:amt,note,date:new Date().toISOString()});
-  await recalcCustomerFromTransactions(cust);
-  await refreshData();
-  cm('sellCredit');
-  if(selectedCustomerId) viewCustomer(selectedCustomerId);
-}
-function openRecordPayment() { let cust = customers.find(c=>c.id===selectedCustomerId); if(cust) document.getElementById('rp-balance-display').textContent = fmt(cust.balance); document.getElementById('rp-amount').value = ''; openModal('recordPayment'); cm('custDetail'); }
-function openSellCredit() { document.getElementById('sc-cust-name').textContent = customers.find(c=>c.id===selectedCustomerId)?.name||''; document.getElementById('sc-note').value = ''; document.getElementById('sc-amount').value = ''; openModal('sellCredit'); cm('custDetail'); }
-function deleteCurrentCustomer() { if(selectedCustomerId) deleteCustomerWithTransactions(selectedCustomerId); }
 async function addCustomer() {
-  let name = document.getElementById('cn-name').value.trim();
+  const name=document.getElementById('cn-name').value.trim(), phone=document.getElementById('cn-phone').value.trim();
   if(!name) return alert('Name required');
-  await addItem('customers',{name, phone:document.getElementById('cn-phone').value.trim(), totalSpent:0,credit:0,debit:0,balance:0,lastActivity:new Date().toISOString()});
-  await refreshData();
-  cm('addCustomer');
-  document.getElementById('cn-name').value='';
-  document.getElementById('cn-phone').value='';
+  const payload={name,phone,balance:0,credit:0,debit:0,totalSpent:0,lastActivity:new Date().toISOString()};
+  if(BACKEND_ONLINE) await apiPost('/api/customers',payload); else await idbAdd('customers',payload);
+  await refreshData(); cm('addCustomer'); document.getElementById('cn-name').value=''; document.getElementById('cn-phone').value='';
 }
-function openOverduePicker(cid) { pendingOverdueCid = cid; openModal('overduePicker'); }
-async function applyOverdueDate() {
-  if(!pendingOverdueCid) return;
-  let cust = customers.find(c=>c.id===pendingOverdueCid);
-  if(!cust) return;
-  let dateStr = document.getElementById('overdue-date-input').value;
-  let manual = parseInt(document.getElementById('overdue-days-manual').value);
-  if(dateStr) { let days = Math.floor((new Date() - new Date(dateStr))/86400000); if(days<0) days=0; cust.manualOverdueDays = days; }
-  else if(!isNaN(manual) && manual>=0) cust.manualOverdueDays = manual;
-  else { alert('Enter date or days'); return; }
-  await updateItem('customers',cust);
-  await refreshData();
-  cm('overduePicker');
-  pendingOverdueCid = null;
+async function deleteCustomerWithTransactions(cid){ if(!confirm('Delete client & all history?')) return;
+  if(BACKEND_ONLINE) await apiDelete('/api/customers/'+cid); else{ await idbDelete('customers',Number(cid)||cid); const txns=await idbGetByIndex('customerTransactions','customerId',Number(cid)||cid); for(const t of txns) await idbDelete('customerTransactions',t.id); }
+  clientHistory.delete(cid); if(selectedCustomerId==cid) selectedCustomerId=null; await refreshData(); cm('custDetail');}
+async function recordPayment(){ const amt=parseFloat(document.getElementById('rp-amount').value); if(!amt||amt<=0) return alert('Enter valid amount'); const cust=customers.find(c=>c.id==selectedCustomerId); if(!cust) return; const actual=Math.min(amt,cust.balance||0); if(actual<=0) return alert('No outstanding debt'); const note=document.getElementById('rp-note').value||'Payment';
+  if(BACKEND_ONLINE) await apiPost('/api/transactions',{customerId:selectedCustomerId,type:'debit',amount:actual,note,date:new Date().toISOString()}); else{ await idbAdd('customerTransactions',{customerId:Number(selectedCustomerId)||selectedCustomerId,type:'debit',amount:actual,note,date:new Date().toISOString()}); const c=customers.find(x=>x.id==selectedCustomerId); if(c){ c.debit=(c.debit||0)+actual; c.balance=(c.credit||0)-(c.debit||0); await idbPut('customers',c); } }
+  await refreshData(); cm('recordPayment'); const updated=customers.find(c=>c.id==selectedCustomerId); if(updated) viewCustomer(updated.id);}
+async function sellOnCredit(){ const note=document.getElementById('sc-note').value.trim(); const amt=parseFloat(document.getElementById('sc-amount').value); if(!note||!amt||amt<=0) return alert('Fill item and amount');
+  if(BACKEND_ONLINE) await apiPost('/api/transactions',{customerId:selectedCustomerId,type:'credit',amount:amt,note,date:new Date().toISOString()}); else{ await idbAdd('customerTransactions',{customerId:Number(selectedCustomerId)||selectedCustomerId,type:'credit',amount:amt,note,date:new Date().toISOString()}); const c=customers.find(x=>x.id==selectedCustomerId); if(c){ c.credit=(c.credit||0)+amt; c.totalSpent=(c.totalSpent||0)+amt; c.balance=(c.credit||0)-(c.debit||0); await idbPut('customers',c); } }
+  await refreshData(); cm('sellCredit'); const updated=customers.find(c=>c.id==selectedCustomerId); if(updated) viewCustomer(updated.id);}
+async function sendWhatsAppReminder(){ const cust=customers.find(c=>c.id==selectedCustomerId); if(!cust||!cust.phone) return alert('No phone number'); if(BACKEND_ONLINE){ try{ await apiPost('/api/whatsapp/send',{customerId:selectedCustomerId}); alert('WhatsApp reminder sent'); }catch(e){ alert('Failed: '+e.message); } return; } const shop=currentUser?.shopName||'Smart Duka'; const bal=`KES ${(cust.balance||0).toLocaleString()}`; const msg=`Hello ${cust.name} 👋,\n\nReminder from *${shop}*: outstanding balance ${bal}. Kindly clear.`; let phone=cust.phone.replace(/\D/g,''); if(phone.startsWith('0')) phone='254'+phone.slice(1); else if(!phone.startsWith('254')) phone='254'+phone; window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,'_blank');}
+function openOverduePicker(cid){ pendingOverdueCid=cid; openModal('overduePicker');}
+async function applyOverdueDate(){ if(!pendingOverdueCid) return; const dateStr=document.getElementById('overdue-date-input').value; const manual=parseInt(document.getElementById('overdue-days-manual').value); let days; if(dateStr) days=Math.max(0,Math.floor((new Date()-new Date(dateStr))/86400000)); else if(!isNaN(manual)&&manual>=0) days=manual; else return alert('Enter date or days'); const cust=customers.find(c=>c.id==pendingOverdueCid); if(!cust) return; cust.manualOverdueDays=days; if(BACKEND_ONLINE) await apiPut('/api/customers/'+pendingOverdueCid,{manualOverdueDays:days}); else await idbPut('customers',cust); await refreshData(); cm('overduePicker'); pendingOverdueCid=null;}
+function stepModal(id,d){ const el=document.getElementById(id); if(el) el.value=Math.max(0,(parseFloat(el.value)||0)+d); }
+const fmt=n=>'KES '+(n||0).toLocaleString('en-KE'); const fmtShort=n=>{const v=Math.abs(n||0); return v>=1000?(n<0?'-':'')+(v/1000).toFixed(1)+'K':String(Math.round(v||0));};
+function escapeHtml(s){ return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+function openModal(t){ document.getElementById(`mo-${t}`).classList.add('on');}
+function cm(t){ document.getElementById(`mo-${t}`).classList.remove('on');}
+function setCustFilter(f){ custFilter=f; renderCustomers();}
+function filterCustomers(){ custSearch=document.getElementById('cust-search-input').value.toLowerCase(); renderCustomers();}
+function computeOverdueDays(cust){ 
+  if(cust.manualOverdueDays !== undefined && cust.manualOverdueDays !== null) return cust.manualOverdueDays;
+  const creditTxns = customerTransactions.filter(t=>t.customerId==cust.id && t.type==='credit').sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(!creditTxns.length) return 0;
+  const lastDate = new Date(creditTxns[0].date);
+  return Math.max(0, Math.floor((new Date() - lastDate) / 86400000));
 }
-function setCustFilter(f) { custFilter = f; renderCustomers(); }
-function filterCustomers() { custSearch = document.getElementById('cust-search-input').value.toLowerCase(); renderCustomers(); }
-function openModal(t) { document.getElementById(`mo-${t}`).classList.add('on'); }
-function cm(t) { document.getElementById(`mo-${t}`).classList.remove('on'); }
+function viewCustomer(id){ const cust=customers.find(c=>c.id==id); if(!cust) return; selectedCustomerId=id; document.getElementById('cd-name').textContent=cust.name; document.getElementById('cd-phone').textContent=cust.phone||'—'; document.getElementById('cd-balance').textContent=fmt(cust.balance); document.getElementById('cd-spent').textContent=fmt(cust.totalSpent); document.getElementById('cd-credit').textContent=fmt(cust.credit); document.getElementById('cd-debit').textContent=fmt(cust.debit); const txns=customerTransactions.filter(t=>t.customerId==id).sort((a,b)=>new Date(b.date)-new Date(a.date)); document.getElementById('cd-txns').innerHTML=txns.map(t=>`<div class="cd-txn"><div><div style="font-size:12px;font-weight:600;">${t.type==='credit'?'↑ Credit':'↓ Payment'}</div><div style="font-size:11px;color:var(--muted2)">${escapeHtml(t.note||'—')}</div><div style="font-size:10px;color:var(--muted)">${new Date(t.date).toLocaleDateString()}</div></div><div style="font-weight:700;${t.type==='credit'?'color:#FB8097':'color:var(--em2)'}">${t.type==='credit'?'+':'-'}${fmt(t.amount)}</div></div>`).join('')||'<div style="text-align:center;padding:20px;color:var(--muted)">No transactions</div>'; openModal('custDetail');}
+function openRecordPayment(){ const cust=customers.find(c=>c.id==selectedCustomerId); if(cust) document.getElementById('rp-balance-display').textContent=fmt(cust.balance); document.getElementById('rp-amount').value='0'; document.getElementById('rp-note').value=''; openModal('recordPayment'); cm('custDetail');}
+function openSellCredit(){ document.getElementById('sc-cust-name').textContent=customers.find(c=>c.id==selectedCustomerId)?.name||''; document.getElementById('sc-note').value=''; document.getElementById('sc-amount').value='0'; openModal('sellCredit'); cm('custDetail');}
+function deleteCurrentCustomer(){ if(selectedCustomerId) deleteCustomerWithTransactions(selectedCustomerId);}
+function toggleCard(cid){ document.getElementById(`card_${cid}`).classList.toggle('expanded');}
+function renderCustomers(){
+  const filtered=customers.filter(c=>custFilter==='debt'?(c.balance||0)>0:custFilter==='clear'?(c.balance||0)===0:true).filter(c=>c.name.toLowerCase().includes(custSearch)||(c.phone||'').includes(custSearch));
+  document.getElementById('p-cust').textContent=customers.length+' Client'+(customers.length!==1?'s':'');
+  const highDebt=customers.filter(c=>(c.balance||0)>1000); const alertEl=document.getElementById('cust-alert'); if(highDebt.length){ alertEl.classList.add('show'); document.getElementById('cust-alert-text').innerHTML=`⚠️ High balance: ${highDebt.map(c=>c.name).join(', ')}`;} else alertEl.classList.remove('show');
+  if(!filtered.length){ document.getElementById('cust-list').innerHTML=`<div class="empty-state"><div style="font-size:32px">👥</div><div>${customers.length?'No matches':'No clients — tap ＋ Add Client'}</div></div>`; return; }
+  document.getElementById('cust-list').innerHTML=filtered.map(c=>{ const hasDebt=(c.balance||0)>0; const overdue=hasDebt?computeOverdueDays(c):0; const badge=hasDebt&&overdue>0?`<span class="overdue-badge ${overdue>=30?'severe':''}">⚠️ ${overdue}d</span>`:''; const hist=clientHistory.get(c.id)||[]; const histHtml=hist.length?`<div class="history-log"><div class="history-title">📜 UPDATE HISTORY (${hist.length})</div>${hist.map(h=>`<div class="history-entry">📅 ${new Date(h.timestamp).toLocaleTimeString()} · <span>${escapeHtml(h.name)}</span> | Credit: ${fmt(h.credit)} | Paid: ${fmt(h.debit)}</div>`).join('')}</div>`:'';
+    const overdueDisplay = hasDebt ? `<div class="overdue-row"><span class="overdue-label">📅 Overdue days:</span><span class="overdue-days ${overdue>=30?'severe':''}">${overdue} day${overdue!==1?'s':''}</span><span class="cal-icon" onclick="event.stopPropagation(); openOverduePicker('${c.id}')">📆 Set date</span></div>` : '';
+    return `<div class="cust-item ${hasDebt?'has-debt':''}" id="card_${c.id}"><div class="cust-header" onclick="toggleCard('${c.id}')"><div class="cust-header-left"><div class="cust-name-header">${escapeHtml(c.name)} ${badge}</div><div class="cust-phone-header">${c.phone||'—'}</div></div><div class="cust-balance-badge"><div class="cust-bal-num ${hasDebt?'debt':'clear'}">${fmtShort(c.balance)}</div><div class="cust-bal-lbl">${hasDebt?'owes':'clear'}</div></div><div class="expand-icon">▼</div></div><div class="cust-details"><div class="balance-preview ${hasDebt?'debt':'clear'}">Balance: ${fmt(c.balance)}</div>${overdueDisplay}${histHtml}<button onclick="viewCustomer('${c.id}')" style="width:100%;margin-top:12px;padding:12px;background:rgba(74,158,223,0.15);border:1px solid rgba(74,158,223,0.4);border-radius:var(--r2);color:#7AB8E8;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--sans);">👁 View Full Profile & WhatsApp</button></div></div>`;
+  }).join('');
+}
+function shareReport(period){ const shop=currentUser?.shopName||'Smart Duka'; const now=new Date(); let label=period==='daily'?`Daily — ${now.toLocaleDateString()}`:period==='weekly'?(()=>{const s=new Date(now); s.setDate(now.getDate()-now.getDay()+(now.getDay()===0?-6:1)); return `Weekly (${s.toLocaleDateString()} – ${now.toLocaleDateString()})`;})():`Monthly — ${now.toLocaleString('default',{month:'long'})} ${now.getFullYear()}`; const debt=customers.reduce((s,c)=>s+(c.balance||0),0); const lines=(customers.length?customers.slice(0,15):[]).map(c=>`• ${c.name}: ${(c.balance||0)===0?'✓ Cleared':'💸 '+fmt(c.balance)}`); if(!lines.length) lines.push('No clients yet.'); let list=lines.join('\n'); if(customers.length>15) list+=`\n… and ${customers.length-15} more.`; const msg=`*${shop}*\n📋 ${label}\n👥 Clients: ${customers.length}\n💳 Total Debt: ${fmt(debt)}\n⚠️ With Debt: ${customers.filter(c=>(c.balance||0)>0).length}\n\n${list}`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
+function openReportModal(){ openModal('report');}
+function openAllTransactionsModal() { renderAllTransactions(); openModal('allTxns'); }
+function renderAllTransactions() { const searchTerm = document.getElementById('txn-search')?.value.toLowerCase() || ''; const txnsWithCustomer = customerTransactions.map(t => { const cust = customers.find(c => c.id == t.customerId); return { ...t, customerName: cust ? cust.name : 'Deleted Client' }; }); const filtered = txnsWithCustomer.filter(t => searchTerm === '' || t.customerName.toLowerCase().includes(searchTerm) || (t.note && t.note.toLowerCase().includes(searchTerm))); filtered.sort((a,b) => new Date(b.date) - new Date(a.date)); const container = document.getElementById('all-txns-list'); if(!container) return; if(filtered.length === 0) { container.innerHTML = `<div class="empty-state"><div>📭 No transactions found</div></div>`; return; } container.innerHTML = filtered.map(t => `<div class="txn-item"><div class="txn-left"><div class="txn-cust-name">${escapeHtml(t.customerName)}</div><div class="txn-date">${new Date(t.date).toLocaleString()}</div><div class="txn-note">${escapeHtml(t.note || '—')}</div></div><div class="txn-amount ${t.type === 'credit' ? 'credit' : 'debit'}">${t.type === 'credit' ? '+' : '-'} ${fmt(t.amount)}</div></div>`).join(''); }
 
-// Auth (unchanged, works)
-const AUTH_SALT='salt',SESSION_KEY='dm_session',USERS_KEY='dm_users';
-async function hashPassword(pw){const enc=new TextEncoder(),data=enc.encode(pw+AUTH_SALT),buf=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-function generateUserId(){return 'user_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);}
-function getUsers(){return JSON.parse(localStorage.getItem(USERS_KEY)||'[]');}
-function saveUsers(users){localStorage.setItem(USERS_KEY,JSON.stringify(users));}
-function findUserByEmail(email){return getUsers().find(u=>u.email.toLowerCase()===email.toLowerCase());}
-function createSession(user){localStorage.setItem(SESSION_KEY,JSON.stringify({userId:user.id,email:user.email,shopName:user.shopName,expires:Date.now()+8*3600000}));currentUser={id:user.id,email:user.email,shopName:user.shopName};updateShopNameDisplay();}
-function getSession(){try{let s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');if(!s||Date.now()>s.expires){localStorage.removeItem(SESSION_KEY);return null;}currentUser={id:s.userId,email:s.email,shopName:s.shopName};updateShopNameDisplay();return s;}catch{return null;}}
-function clearSession(){localStorage.removeItem(SESSION_KEY);currentUser=null;}
-function updateShopNameDisplay(){let el=document.getElementById('shop-name-display');if(el&&currentUser)el.textContent=currentUser.shopName||'Smart Duka';}
-function getUserDBName(uid){return `duka_master_${uid}`;}
-async function openUserDB(uid){return new Promise((res,rej)=>{let r=indexedDB.open(getUserDBName(uid),3);r.onerror=()=>rej(r.error);r.onsuccess=()=>{db=r.result;res(db);};r.onupgradeneeded=(ev)=>{let db=ev.target.result;if(!db.objectStoreNames.contains('customers'))db.createObjectStore('customers',{keyPath:'id',autoIncrement:true});if(!db.objectStoreNames.contains('customerTransactions')){let cts=db.createObjectStore('customerTransactions',{keyPath:'id',autoIncrement:true});cts.createIndex('customerId','customerId');}if(!db.objectStoreNames.contains('sales'))db.createObjectStore('sales',{keyPath:'id',autoIncrement:true});};});}
-async function initializeSampleData(){let existing=await getAll('customers');if(existing.length===0){await addItem('customers',{name:'Sarah Wanjiku',phone:'0712 345 678',totalSpent:2500,credit:1500,debit:500,balance:1000,lastActivity:new Date().toISOString(),manualOverdueDays:15});await addItem('customers',{name:'Peter Kamau',phone:'0723 456 789',totalSpent:4200,credit:4200,debit:4200,balance:0,lastActivity:new Date().toISOString()});await addItem('customerTransactions',{customerId:1,type:'credit',amount:1500,note:'Initial',date:new Date(Date.now()-15*86400000).toISOString()});await addItem('customerTransactions',{customerId:1,type:'debit',amount:500,note:'Payment',date:new Date().toISOString()});}}
-function showApp(){document.getElementById('auth-overlay').style.display='none';document.getElementById('app').style.display='flex';renderCustomers();}
+// ---------- Auth ----------
+const AUTH_SALT='sd_s', SESSION_KEY='dm_sess', USERS_KEY='dm_users';
+async function hashPassword(pw){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw+AUTH_SALT)); return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+function genId(){ return 'u_'+Date.now()+'_'+Math.random().toString(36).substr(2,8);}
+function getUsers(){ return JSON.parse(localStorage.getItem(USERS_KEY)||'[]');}
+function saveUsers(u){ localStorage.setItem(USERS_KEY,JSON.stringify(u));}
+function findUser(e){ return getUsers().find(u=>u.email.toLowerCase()===e.toLowerCase());}
+function createSession(user){ localStorage.setItem(SESSION_KEY,JSON.stringify({userId:user.id,email:user.email,shopName:user.shopName,expires:Date.now()+8*3600000})); currentUser=user; updateShopDisplay();}
+function getSession(){ try{ const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null'); if(!s||Date.now()>s.expires){ localStorage.removeItem(SESSION_KEY); return null;} currentUser={id:s.userId,email:s.email,shopName:s.shopName}; updateShopDisplay(); return s;}catch{return null;}}
+function clearSession(){ localStorage.removeItem(SESSION_KEY); currentUser=null;}
+function updateShopDisplay(){ const el=document.getElementById('shop-name-display'); if(el&&currentUser) el.textContent=currentUser.shopName||'Smart Duka';}
 let authMode='login';
-function authSetTab(mode){authMode=mode;document.getElementById('tab-login').classList.toggle('active',mode==='login');document.getElementById('tab-signup').classList.toggle('active',mode==='signup');document.getElementById('login-fields').style.display=mode==='login'?'block':'none';document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none';document.getElementById('auth-submit-btn').textContent=mode==='login'?'Sign In':'Create Account';document.getElementById('auth-switch-msg').innerHTML=mode==='login'?`Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span>`:`Already have an account? <span class="auth-switch-link" onclick="authSetTab('login')">Sign in</span>`;}
-function showAuthError(msg){let err=document.getElementById('auth-error');err.textContent=msg;err.classList.add('show');setTimeout(()=>err.classList.remove('show'),4000);}
-async function authSubmit(){let email=(authMode==='login'?document.getElementById('login-email'):document.getElementById('signup-email')).value.trim();let pwd=(authMode==='login'?document.getElementById('login-password'):document.getElementById('signup-password')).value;if(!email||!pwd)return showAuthError('Required');if(authMode==='signup'){let shop=document.getElementById('signup-shopname').value.trim();if(!shop)return showAuthError('Shop name');if(pwd.length<6)return showAuthError('Min 6 chars');let users=getUsers();if(findUserByEmail(email))return showAuthError('Email exists');let hash=await hashPassword(pwd);let newUser={id:generateUserId(),email:email.toLowerCase(),passwordHash:hash,shopName:shop};users.push(newUser);saveUsers(users);createSession(newUser);await openUserDB(newUser.id);await initializeSampleData();await loadData();showApp();}else{let user=findUserByEmail(email);if(!user)return showAuthError('Invalid');let hash=await hashPassword(pwd);if(hash!==user.passwordHash)return showAuthError('Invalid');createSession(user);await openUserDB(user.id);await loadData();showApp();}}
-async function authLogout(){if(confirm('Sign out?')){clearSession();db=null;document.getElementById('app').style.display='none';document.getElementById('auth-overlay').style.display='flex';authSetTab('login');document.querySelectorAll('.moverlay.on').forEach(m=>m.classList.remove('on'));}}
-(async function init(){let sess=getSession();if(sess){await openUserDB(sess.userId);await loadData();showApp();}else{document.getElementById('auth-overlay').style.display='flex';authSetTab('login');}document.querySelectorAll('.moverlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('on');}));})();
+function authSetTab(mode){ authMode=mode; document.getElementById('tab-login').classList.toggle('active',mode==='login'); document.getElementById('tab-signup').classList.toggle('active',mode==='signup'); document.getElementById('login-fields').style.display=mode==='login'?'block':'none'; document.getElementById('signup-fields').style.display=mode==='signup'?'block':'none'; document.getElementById('auth-submit-btn').textContent=mode==='login'?'Sign In':'Create Account'; document.getElementById('auth-switch-msg').innerHTML=mode==='login'?`Don't have an account? <span class="auth-switch-link" onclick="authSetTab('signup')">Sign up</span>`:`Already have an account? <span class="auth-switch-link" onclick="authSetTab('login')">Sign in</span>`;}
+function showAuthError(m){ const el=document.getElementById('auth-error'); el.textContent=m; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),4000);}
+async function authSubmit(){ const email=(authMode==='login'?document.getElementById('login-email'):document.getElementById('signup-email')).value.trim(); const pwd=(authMode==='login'?document.getElementById('login-password'):document.getElementById('signup-password')).value; if(!email||!pwd) return showAuthError('Email and password required'); if(authMode==='signup'){ const shop=document.getElementById('signup-shopname').value.trim(); if(!shop) return showAuthError('Shop name required'); if(pwd.length<6) return showAuthError('Password min 6 characters'); if(findUser(email)) return showAuthError('Email already registered'); const user={id:genId(),email:email.toLowerCase(),passwordHash:await hashPassword(pwd),shopName:shop}; const users=getUsers(); users.push(user); saveUsers(users); createSession(user); if(!BACKEND_ONLINE) await openUserDB(user.id); await loadData(); showApp(); } else{ const user=findUser(email); if(!user||await hashPassword(pwd)!==user.passwordHash) return showAuthError('Invalid email or password'); createSession(user); if(!BACKEND_ONLINE) await openUserDB(user.id); await loadData(); showApp();}}
+async function authLogout(){ if(!confirm('Sign out?')) return; clearSession(); customers=[]; customerTransactions=[]; db=null; document.getElementById('app').style.display='none'; document.getElementById('auth-overlay').style.display='flex'; authSetTab('login'); document.querySelectorAll('.moverlay.on').forEach(m=>m.classList.remove('on'));}
+function showApp(){ document.getElementById('auth-overlay').style.display='none'; document.getElementById('app').style.display='flex'; renderCustomers();}
+(async function init(){ await pingBackend(); const sess=getSession(); if(sess){ if(!BACKEND_ONLINE) await openUserDB(sess.userId); await loadData(); showApp(); } else { document.getElementById('auth-overlay').style.display='flex'; authSetTab('login'); } document.querySelectorAll('.moverlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el) el.classList.remove('on');})); })();
 </script>
 </body>
 </html>
