@@ -303,7 +303,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;op
 <div class="moverlay" id="mo-sellCredit"><div class="msheet"><div class="mhandle"></div><div class="mhdr"><div class="mtitle">Sell on Credit</div><button class="mclose" onclick="cm('sellCredit')">✕</button></div><div style="background:rgba(229,69,98,0.05);border-radius:var(--r2);padding:14px;margin-bottom:20px;"><div style="font-size:9.5px;">⚠ This increases the client's debt</div><div style="margin-top:6px;">Client: <strong id="sc-cust-name">—</strong></div></div><div class="fld"><label>Item / Description</label><input type="text" id="sc-note" placeholder="e.g. Groceries"></div><div class="fld"><label>Amount (KES)</label><div class="modal-stepper"><button class="stepper-btn" onclick="stepModal('sc-amount',-100)">−</button><input type="number" id="sc-amount" class="stepper-input" value="0" step="100"><button class="stepper-btn" onclick="stepModal('sc-amount',100)">+</button></div></div><button class="sbtn am" onclick="sellOnCredit()">Add Credit →</button></div></div>
 
 <script>
-// ---------- Core logic with shop settings (Till, Paybill, Pochi) ----------
+// ---------- Core logic with shop payment details in WhatsApp ----------
 const API_BASE = 'http://localhost:5000';
 let BACKEND_ONLINE = false;
 let db = null;
@@ -358,7 +358,26 @@ async function recordPayment(){ const amt=parseFloat(document.getElementById('rp
 async function sellOnCredit(){ const note=document.getElementById('sc-note').value.trim(); const amt=parseFloat(document.getElementById('sc-amount').value); if(!note||!amt||amt<=0) return alert('Fill item and amount');
   if(BACKEND_ONLINE) await apiPost('/api/transactions',{customerId:selectedCustomerId,type:'credit',amount:amt,note,date:new Date().toISOString()}); else{ await idbAdd('customerTransactions',{customerId:Number(selectedCustomerId)||selectedCustomerId,type:'credit',amount:amt,note,date:new Date().toISOString()}); const c=customers.find(x=>x.id==selectedCustomerId); if(c){ c.credit=(c.credit||0)+amt; c.totalSpent=(c.totalSpent||0)+amt; c.balance=(c.credit||0)-(c.debit||0); await idbPut('customers',c); } }
   await refreshData(); cm('sellCredit'); const updated=customers.find(c=>c.id==selectedCustomerId); if(updated) viewCustomer(updated.id);}
-async function sendWhatsAppReminder(){ const cust=customers.find(c=>c.id==selectedCustomerId); if(!cust||!cust.phone) return alert('No phone number'); if(BACKEND_ONLINE){ try{ await apiPost('/api/whatsapp/send',{customerId:selectedCustomerId}); alert('WhatsApp reminder sent'); }catch(e){ alert('Failed: '+e.message); } return; } const shop=currentUser?.shopName||'Smart Duka'; const bal=`KES ${(cust.balance||0).toLocaleString()}`; const msg=`Hello ${cust.name} 👋,\n\nReminder from *${shop}*: outstanding balance ${bal}. Kindly clear.`; let phone=cust.phone.replace(/\D/g,''); if(phone.startsWith('0')) phone='254'+phone.slice(1); else if(!phone.startsWith('254')) phone='254'+phone; window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,'_blank');}
+// UPDATED: WhatsApp reminder includes shop payment details (Till, Paybill, Pochi) using wa.me link (works online/offline)
+async function sendWhatsAppReminder(){ 
+  const cust=customers.find(c=>c.id==selectedCustomerId); 
+  if(!cust||!cust.phone) return alert('No phone number'); 
+  const shopName = currentUser?.shopName || 'Smart Duka';
+  const balance = fmt(cust.balance || 0);
+  let msg = `Hello ${cust.name} 👋,\n\n`;
+  msg += `🏪 *${shopName}* reminder\n`;
+  msg += `💰 Outstanding balance: *${balance}*\n\n`;
+  msg += `📲 Payment options:\n`;
+  if(currentUser?.tillNumber) msg += `▪️ Till Number: ${currentUser.tillNumber}\n`;
+  if(currentUser?.paybillNumber) msg += `▪️ Paybill Number: ${currentUser.paybillNumber}\n`;
+  if(currentUser?.pochiNumber) msg += `▪️ Pochi / Business No: ${currentUser.pochiNumber}\n`;
+  if(!currentUser?.tillNumber && !currentUser?.paybillNumber && !currentUser?.pochiNumber) msg += `▪️ Ask shop for payment details.\n`;
+  msg += `\nThank you for your business! 🙏`;
+  let phone = cust.phone.replace(/\D/g,'');
+  if(phone.startsWith('0')) phone = '254' + phone.slice(1);
+  else if(!phone.startsWith('254')) phone = '254' + phone;
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
 function openOverduePicker(cid){ pendingOverdueCid=cid; openModal('overduePicker');}
 async function applyOverdueDate(){ if(!pendingOverdueCid) return; const dateStr=document.getElementById('overdue-date-input').value; const manual=parseInt(document.getElementById('overdue-days-manual').value); let days; if(dateStr) days=Math.max(0,Math.floor((new Date()-new Date(dateStr))/86400000)); else if(!isNaN(manual)&&manual>=0) days=manual; else return alert('Enter date or days'); const cust=customers.find(c=>c.id==pendingOverdueCid); if(!cust) return; cust.manualOverdueDays=days; if(BACKEND_ONLINE) await apiPut('/api/customers/'+pendingOverdueCid,{manualOverdueDays:days}); else await idbPut('customers',cust); await refreshData(); cm('overduePicker'); pendingOverdueCid=null;}
 function stepModal(id,d){ const el=document.getElementById(id); if(el) el.value=Math.max(0,(parseFloat(el.value)||0)+d); }
@@ -418,7 +437,7 @@ async function saveShopSettings() {
   if(idx !== -1) {
     users[idx].tillNumber = till;
     users[idx].paybillNumber = paybill;
-    users[idx].pochiiNumber = pochi;
+    users[idx].pochiNumber = pochi;
     saveUsers(users);
   }
   // Update session
